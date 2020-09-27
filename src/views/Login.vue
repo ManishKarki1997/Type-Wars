@@ -22,7 +22,7 @@
           </b-field>
 
           <div>
-            <b-button type="submit" class="is-primary">Login</b-button>
+            <b-button native-type="submit" class="is-primary">Login</b-button>
 
             <div class="mt-4" style="display:flex;">
                 <h4 class="mr-2">Don't have an account?</h4>
@@ -37,6 +37,7 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue';
+import Cookies from 'js-cookie'
 
 export default {
   components: {
@@ -51,7 +52,25 @@ export default {
     };
   },
   methods: {
-    handleUserLogin() {},
+    async handleUserLogin() {
+    const res = await this.$axios.post(`${process.env.VUE_APP_API_URL}/api/auth/login`,this.user);
+      if(!res.data.error){
+        this.$toast.open({
+            type:"success",
+            message:res.data.message,
+        })
+        Cookies.set("token", res.data.payload.token);
+        this.$store.commit("user/SET_USER",{
+            isLoggedIn: true,
+            user:res.data.payload.user,
+            token: res.data.payload.token
+        });
+
+        setTimeout(() => {
+            this.$router.push('/app/dashboard');
+        }, 2000);
+      }
+    },
   },
 };
 </script>

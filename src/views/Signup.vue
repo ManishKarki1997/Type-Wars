@@ -39,7 +39,7 @@
           </div>
 
           <div>
-            <b-button type="submit" class="is-primary">Signup</b-button>
+            <b-button native-type="submit" class="is-primary">Signup</b-button>
             <div class="mt-2" style="display: flex">
               <h4 class="mr-2">Already have an account?</h4>
               <router-link to="/login"><strong>Login</strong></router-link>
@@ -53,6 +53,7 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -70,7 +71,17 @@ export default {
     };
   },
   methods: {
-    handleUsersignup() {},
+    async handleUsersignup() {
+      const res = await this.$axios.post(`${process.env.VUE_APP_API_URL}/api/auth`,this.user);
+      if(!res.data.error){
+        this.$toast.open({
+            message:res.data.message
+        })
+        setTimeout(() => {
+            this.$router.push('/login');
+        }, 2000);
+      }
+    },
   },
 };
 </script>
