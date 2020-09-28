@@ -1,6 +1,6 @@
 <template>
   <div class="center examplex">
-    <vs-navbar shadow target-scroll="#hide-scroll-content" rightCollapsed v-model="active">
+    <vs-navbar not-line shadow target-scroll="#hide-scroll-content" rightCollapsed v-model="active">
       <template #left>
         <router-link to="/app/dashboard">
           <h2>Type<span>Wars</span></h2>
@@ -8,6 +8,14 @@
       </template>
 
       <template #right>
+        <vs-navbar-item
+          to="/app/dashboard"
+          :active="active == 'dashboard'"
+          id="dashboard"
+          v-if="isLoggedIn"
+        >
+          Dashboard
+        </vs-navbar-item>
         <vs-navbar-item to="/app/feed" :active="active == 'feed'" id="feed" v-if="isLoggedIn">
           Feed
         </vs-navbar-item>
@@ -25,6 +33,7 @@
         <vs-button v-if="!isLoggedIn">
           <router-link to="/signup"> Sign Up </router-link>
         </vs-button>
+        <vs-button @click="logout" v-if="isLoggedIn" circle transparent> Logout </vs-button>
 
         <vs-avatar v-if="isLoggedIn" circle size="35">
           <img :src="user.avatar" alt="User Avatar" />
@@ -39,13 +48,19 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      active: "feed",
+      active: "dashboard",
     };
   },
   computed: {
     ...mapState("user", ["isLoggedIn", "user"]),
   },
-  methods: {},
+  methods: {
+    logout() {
+      this.active = "";
+      this.$store.commit("user/LOGOUT");
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 

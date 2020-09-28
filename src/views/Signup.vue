@@ -1,54 +1,51 @@
 <template>
-  <div>
-    <Navbar />
-    <section>
-      <div class="signup-form-wrapper">
-        <div class="mb-4 form-header-wrapper">
-          <h4>Signup for an account</h4>
-        </div>
-        <form @submit.prevent="handleUsersignup">
-          <vs-input type="text" label="Name" v-model="user.name" required> </vs-input>
-
-          <vs-input type="text" label="Username" v-model="user.username" required> </vs-input>
-
-          <vs-input type="email" label="Email" v-model="user.email" required> </vs-input>
-
-          <div class="columns">
-            <vs-input type="password" label="Password" v-model="user.password" required> </vs-input>
-            <vs-input type="password" label="Password" v-model="user.retypePassword" required>
-            </vs-input>
-          </div>
-
-          <div>
-            <vs-button
-              :loading="isCallingAPI"
-              size="large"
-              circle
-              :active="activeButton == 0"
-              type="submit"
-            >
-              Signup
-            </vs-button>
-
-            <div class="form-footer-wrapper">
-              <h4 class="mr-2">Already have an account?</h4>
-              <vs-button to="/login" transparent circle> Login </vs-button>
-            </div>
-          </div>
-        </form>
+  <section>
+    <div class="signup-form-wrapper">
+      <div class="mb-4 form-header-wrapper">
+        <h4>Signup for an account</h4>
       </div>
-    </section>
-  </div>
+      <form @submit.prevent="handleUsersignup">
+        <vs-input type="text" label="Name" v-model="user.name"> </vs-input>
+
+        <vs-input type="text" label="Username" v-model="user.username"> </vs-input>
+
+        <vs-input type="email" label="Email" v-model="user.email"> </vs-input>
+
+        <div class="columns">
+          <vs-input type="password" label="Password" v-model="user.password"> </vs-input>
+
+          <vs-input
+            type="password"
+            label="Retype Password"
+            v-model="user.retypePassword"
+          ></vs-input>
+        </div>
+
+        <div>
+          <vs-button
+            :loading="isCallingAPI"
+            size="large"
+            circle
+            :active="activeButton == 0"
+            button="submit"
+          >
+            Signup
+          </vs-button>
+
+          <div class="form-footer-wrapper">
+            <h4 class="mr-2">Already have an account?</h4>
+            <vs-button to="/login" transparent circle> Login </vs-button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
 import axios from "axios";
 
 export default {
-  components: {
-    Navbar,
-  },
   data() {
     return {
       activeButton: 0,
@@ -81,7 +78,7 @@ export default {
       } catch (error) {
         this.$vs.notification({
           title: "Error",
-          text: "Something went wrong.",
+          text: error.response.data.message,
           color: "danger",
           duration: 2000,
           square: true,

@@ -38,8 +38,8 @@ Vue.use(Vuesax, {});
 
 Vue.use(
   new VueSocketIO({
-    debug: true,
-    connection: "http://localhost:4000/",
+    debug: false,
+    connection: "http://localhost:4000",
   })
 );
 

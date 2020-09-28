@@ -40,7 +40,7 @@ const routes = [
     name: "App",
     path: "/app",
     beforeEnter: AuthGuard,
-    // redirect: "/app/dashboard",
+    redirect: "/app/dashboard",
     component: () => import(/* webpackChunkName: "Dashboard" */ "../views/App/Home"),
     children: [
       {

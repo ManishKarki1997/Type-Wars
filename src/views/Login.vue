@@ -1,37 +1,30 @@
 <template>
-  <div>
-    <Navbar />
-    <section>
-      <div class="login-form-wrapper">
-        <div class="mb-4 form-header-wrapper">
-          <h4>Login to your account</h4>
-        </div>
-        <form @submit.prevent="handleUserLogin">
-          <vs-input type="text" label="Username" v-model="user.username"> </vs-input>
-
-          <vs-input type="password" label="Password" v-model="user.password"> </vs-input>
-          <div>
-            <vs-button :loading="isCallingAPI" size="large" active type="submit"> Login </vs-button>
-
-            <div class="form-footer-wrapper">
-              <h4>Don't have an account?</h4>
-              <vs-button to="/signup" size="large" transparent circle> Signup </vs-button>
-            </div>
-          </div>
-        </form>
+  <section>
+    <div class="login-form-wrapper">
+      <div class="mb-4 form-header-wrapper">
+        <h4>Login to your account</h4>
       </div>
-    </section>
-  </div>
+      <form @submit.prevent="handleUserLogin">
+        <vs-input type="text" label="Username" v-model="user.username"> </vs-input>
+
+        <vs-input type="password" label="Password" v-model="user.password"> </vs-input>
+        <div>
+          <vs-button :loading="isCallingAPI" size="large" active button="submit"> Login </vs-button>
+
+          <div class="form-footer-wrapper">
+            <h4>Don't have an account?</h4>
+            <vs-button to="/signup" size="large" transparent circle> Signup </vs-button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
 import Cookies from "js-cookie";
 
 export default {
-  components: {
-    Navbar,
-  },
   data() {
     return {
       isCallingAPI: false,
