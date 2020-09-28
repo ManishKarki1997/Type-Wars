@@ -53,8 +53,7 @@ export default {
           //   position:'top-right',
           // });
 
-this.$toast.success(res.data.message
-)
+          this.$toast.success(res.data.message);
           Cookies.set("token", res.data.payload.token);
           this.$store.commit("user/SET_USER", {
             isLoggedIn: true,
@@ -67,10 +66,7 @@ this.$toast.success(res.data.message
           }, 2000);
         }
       } catch (error) {
-        this.$toast.error(
-  error.response.data.message
-)
-      
+        this.$toast.error(error.response.data.message);
       } finally {
         this.isCallingAPI = false;
       }

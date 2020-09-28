@@ -1,34 +1,70 @@
 <template>
-  <vs-card class="online-players-cards-wrapper">
-    <template #title>
-      <h3>Online Players</h3>
-    </template>
+  <div>
+    <vs-card class="online-players-cards-wrapper">
+      <template #title>
+        <h3>Online Players</h3>
+      </template>
 
-    <template #text>
-      <transition-group class="online-users" name="list" tag="ul">
-        <li class="online-user" v-for="user in onlineUsers" :key="user.email">
-          <vs-avatar circle size="35" badge badge-color="success">
-            <img :src="user.avatar" :alt="user.name + ' avatar image'" />
+      <template #text>
+        <transition-group class="online-users" name="list" tag="ul">
+          <li class="online-user" v-for="onlineUser in onlineUsers" :key="onlineUser.email">
+            <vs-avatar circle size="35" badge badge-color="success">
+              <img :src="onlineUser.avatar" :alt="onlineUser.name + ' avatar image'" />
+            </vs-avatar>
+            <div class="user-details">
+              <h4>{{ onlineUser.name }}</h4>
+              <!-- <p>{{ user.email }}</p> -->
+            </div>
+
+            <div class="user-actions-wrapper" v-if="onlineUser.email !== user.email">
+              <vs-tooltip circle top class="icon-wrapper">
+                <GamepadIcon @click="handleChallengeUserClick(onlineUser)" />
+                <template #tooltip> Challenge for a game </template>
+              </vs-tooltip>
+              <vs-tooltip circle top class="icon-wrapper">
+                <SupportIcon />
+                <template #tooltip> Send a friend request </template>
+              </vs-tooltip>
+            </div>
+          </li>
+        </transition-group>
+      </template>
+    </vs-card>
+
+    <vs-dialog
+      width="550px"
+      blur
+      center
+      v-if="showChallengeUserConfirmModal"
+      v-model="showChallengeUserConfirmModal"
+    >
+      <template #header>
+        <h4 class="not-margin">Challenge {{ userSelectedForAGame.name }}</h4>
+      </template>
+
+      <div class="con-content">
+        <div class="dialog-user">
+          <vs-avatar circle size="35">
+            <img :src="userSelectedForAGame.avatar" alt="User Avatar" />
           </vs-avatar>
-          <div class="user-details">
-            <h4>{{ user.name }}</h4>
-            <!-- <p>{{ user.email }}</p> -->
+          <div>
+            <h4>{{ userSelectedForAGame.name }}</h4>
+            <!-- <p>some other user statistics</p> -->
           </div>
+        </div>
+        <vs-input type="text" label="Challenge Message" v-model="challengeMessage"> </vs-input>
+      </div>
 
-          <div class="user-actions-wrapper">
-            <vs-tooltip circle top class="icon-wrapper">
-              <GamepadIcon />
-              <template #tooltip> Challenge for a game </template>
-            </vs-tooltip>
-            <vs-tooltip circle top class="icon-wrapper">
-              <SupportIcon />
-              <template #tooltip> Send a friend request </template>
-            </vs-tooltip>
-          </div>
-        </li>
-      </transition-group>
-    </template>
-  </vs-card>
+      <template #footer>
+        <div class="con-footer">
+          <vs-button @click="challengeUserForAGame" active> Challenge </vs-button>
+          <vs-button @click="showChallengeUserConfirmModal = false" dark transparent>
+            Cancel
+          </vs-button>
+        </div>
+      </template>
+    </vs-dialog>
+  </div>
 </template>
 
 <script>
@@ -36,16 +72,56 @@ import { mapState } from "vuex";
 import GamepadIcon from "@/assets/icons/gamepad.svg";
 import SupportIcon from "@/assets/icons/support.svg";
 
+import ChallengeNotificationContent from "@/components/App/ChallengeNotificationContent";
+
 export default {
   components: {
     GamepadIcon,
     SupportIcon,
+    ChallengeNotificationContent,
   },
   computed: {
     ...mapState("user", ["user", "onlineUsers"]),
   },
   data() {
-    return {};
+    return {
+      userSelectedForAGame: null,
+      showChallengeUserConfirmModal: false,
+      challengeMessage: "",
+      someoneChallengedYou: false,
+      challengeData: null,
+    };
+  },
+  sockets: {
+    SOMEONE_CHALLEGED_YOU(challengeData) {
+      this.$store.commit("game/ADD_NEW_CHALLENGE_REQUEST", challengeData);
+
+      const noti = this.$vs.notification({
+        width: "auto",
+        duration: "none",
+        content: ChallengeNotificationContent,
+      });
+    },
+  },
+  methods: {
+    handleChallengeUserClick(userSelectedForAGame) {
+      this.userSelectedForAGame = userSelectedForAGame;
+      this.showChallengeUserConfirmModal = true;
+    },
+    challengeUserForAGame() {
+      const payload = {
+        challenger: this.user,
+        challengedUser: this.userSelectedForAGame,
+        message: this.challengeMessage,
+      };
+
+      this.$socket.emit("SOMEONE_CHALLENGED_FOR_A_GAME", payload);
+      this.challengeMessage = "";
+      this.userSelectedForAGame = null;
+      this.showChallengeUserConfirmModal = false;
+
+      this.$toast.success("Challenge request sent. Awaiting the decision.");
+    },
   },
 };
 </script>
@@ -122,6 +198,30 @@ export default {
         }
       }
     }
+  }
+}
+
+.dialog-user {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 3rem;
+
+  .vs-avatar-content {
+    margin-right: 8px;
+  }
+}
+.vs-input-parent .vs-input-content {
+  margin-bottom: 1rem;
+
+  label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  input {
+    width: 100%;
   }
 }
 </style>
