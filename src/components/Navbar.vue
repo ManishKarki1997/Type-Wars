@@ -2,7 +2,9 @@
   <div class="center examplex">
     <vs-navbar shadow target-scroll="#hide-scroll-content" rightCollapsed v-model="active">
       <template #left>
-        <h2>Type<span>Wars</span></h2>
+        <router-link to="/app/dashboard">
+          <h2>Type<span>Wars</span></h2>
+        </router-link>
       </template>
 
       <template #right>

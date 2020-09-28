@@ -8,6 +8,7 @@ import store from "./store";
 import "material-icons/iconfont/material-icons.css";
 import Vuesax from "vuesax";
 import "vuesax/dist/vuesax.css";
+import VueSocketIO from "vue-socket.io";
 
 require("@/assets/css/main.scss");
 
@@ -34,6 +35,13 @@ Vue.use(VueToast, {
   type: "info",
 });
 Vue.use(Vuesax, {});
+
+Vue.use(
+  new VueSocketIO({
+    debug: true,
+    connection: "http://localhost:4000/",
+  })
+);
 
 Vue.config.productionTip = false;
 

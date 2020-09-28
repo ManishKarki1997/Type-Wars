@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Navbar class="navbar-container" />
-    <router-view />
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
   </div>
 </template>
 
@@ -15,6 +17,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#app {
+  background-color: #f7fafc;
+}
 .navbar-container {
   margin-bottom: 4rem;
 }

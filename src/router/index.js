@@ -1,14 +1,25 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import LandingPage from "../views/LandingPage.vue";
+import Feed from "../views/App/Feed.vue";
+
+import Cookies from "js-cookie";
 
 Vue.use(VueRouter);
+
+const AuthGuard = (to, from, next) => {
+  if (Cookies.get("token")) {
+    next();
+  } else {
+    next("/login");
+  }
+};
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "LandingPage",
+    component: LandingPage,
   },
   {
     path: "/about",
@@ -26,19 +37,35 @@ const routes = [
     component: () => import(/* webpackChunkName: "signup" */ "../views/Signup.vue"),
   },
   {
-    path: "/app/dashboard",
-    name: "Dashboard",
-    component: () => import(/* webpackChunkName: "signup" */ "../views/App/Dashboard.vue"),
+    name: "App",
+    path: "/app",
+    beforeEnter: AuthGuard,
+    // redirect: "/app/dashboard",
+    component: () => import(/* webpackChunkName: "Dashboard" */ "../views/App/Home"),
+    children: [
+      {
+        name: "Dashboard",
+        path: "dashboard",
+        component: () => import(/* webpackChunkName: "Dashboard" */ "../views/App/Dashboard.vue"),
+      },
+      {
+        name: "Feed",
+        path: "feed",
+        component: Feed,
+        // component: view("App/Feed.vue"),
+        component: () => import(/* webpackChunkName: "Feed" */ "../views/App/Feed"),
+      },
+      {
+        name: "Leaderboards",
+        path: "leaderboards",
+        // component: view("App/Leaderboards.vue"),
+        component: () => import(/* webpackChunkName: "Leaderboards" */ "../views/App/Leaderboards"),
+      },
+    ],
   },
   {
-    path: "/app/feed",
-    name: "Feed",
-    component: () => import(/* webpackChunkName: "signup" */ "../views/App/Feed.vue"),
-  },
-  {
-    path: "/app/leaderboards",
-    name: "Leaderboards",
-    component: () => import(/* webpackChunkName: "signup" */ "../views/App/Leaderboards.vue"),
+    path: "*",
+    component: () => import(/* webpackChunkName: "Error" */ "../views/Error"),
   },
 ];
 

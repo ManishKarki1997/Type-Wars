@@ -96,9 +96,7 @@ export default {
 
 <style lang="scss">
 section {
-  background-color: #edf2f7;
-  // height: calc(100vh - 4rem);
-  height: 100vh;
+  height: calc(100vh - 4rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,7 +118,12 @@ section {
       background-color: white;
       padding: 2rem;
       border-radius: 5px;
-      box-shadow: 12px 0px 10px -10px rgba(0, 0, 0, var(--vs-shadow-opacity));
+
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      &:hover {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+
       .vs-input-parent {
         margin: 2rem 0 !important;
 

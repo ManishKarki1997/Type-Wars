@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <h4>Leaderboards</h4>
     <p>
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt nulla consectetur doloribus sint

@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
 }
 
 body {
@@ -25,4 +26,17 @@ a {
 
 .container {
   padding: 1rem 4rem;
+  min-height: calc(100vh - 4rem);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
 }

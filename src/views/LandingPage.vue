@@ -1,10 +1,10 @@
 <template>
   <div class="home">
     <Navbar />
-    <el-container>
+    <div class="container">
       <h4>Type<span>Wars</span></h4>
       <p>An online multiplayer competitive typing game.</p>
-    </el-container>
+    </div>
   </div>
 </template>
 
