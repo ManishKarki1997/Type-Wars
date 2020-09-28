@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h4>Dashboard</h4>
+    <h4>Feed</h4>
     <p>
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt nulla consectetur doloribus sint
       beatae corporis non nihil explicabo? Eaque, impedit nisi aliquam, ipsa neque assumenda,

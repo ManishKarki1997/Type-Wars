@@ -1,17 +1,15 @@
-import Vue from 'vue';
-import Buefy from 'buefy';
-import axios from 'axios';
-import VueToast from 'vue-toast-notification';
-import Cookies from 'js-cookie';
-import App from './App.vue';
-import router from './router';
-import store from './store';
-import 'buefy/dist/buefy.css';
-require('@/assets/css/main.scss');
+import Vue from "vue";
+import axios from "axios";
+import VueToast from "vue-toast-notification";
+import Cookies from "js-cookie";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import "material-icons/iconfont/material-icons.css";
+import Vuesax from "vuesax";
+import "vuesax/dist/vuesax.css";
 
-// import 'vue-toast-notification/dist/theme-default.css';
-import 'vue-toast-notification/dist/theme-sugar.css';
-
+require("@/assets/css/main.scss");
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 
@@ -19,7 +17,7 @@ Vue.prototype.$axios = axios;
 
 axios.interceptors.request.use(
   (config) => {
-    const token = Cookies.getJSON('token');
+    const token = Cookies.getJSON("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,15 +25,15 @@ axios.interceptors.request.use(
   },
   (error) => {
     Promise.reject(error);
-  },
+  }
 );
 
-Vue.use(Buefy);
-Vue.use(VueToast,{
-  position:"top-right",
-  duration:2000,
-  type:"info"
+Vue.use(VueToast, {
+  position: "top-right",
+  duration: 2000,
+  type: "info",
 });
+Vue.use(Vuesax, {});
 
 Vue.config.productionTip = false;
 
@@ -43,4 +41,4 @@ new Vue({
   router,
   store,
   render: (h) => h(App),
-}).$mount('#app');
+}).$mount("#app");

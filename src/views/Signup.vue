@@ -7,42 +7,32 @@
           <h4>Signup for an account</h4>
         </div>
         <form @submit.prevent="handleUsersignup">
-          <b-field label="Name">
-            <b-input v-model="user.name" required></b-input>
-          </b-field>
-          <b-field label="Username">
-            <b-input v-model="user.username" min-length="6" required></b-input>
-          </b-field>
-          <b-field label="Email">
-            <b-input v-model="user.email" min-length="6" required></b-input>
-          </b-field>
+          <vs-input type="text" label="Name" v-model="user.name" required> </vs-input>
+
+          <vs-input type="text" label="Username" v-model="user.username" required> </vs-input>
+
+          <vs-input type="email" label="Email" v-model="user.email" required> </vs-input>
 
           <div class="columns">
-            <b-field class="column one-half" label="Password">
-              <b-input
-                value="123"
-                v-model="user.password"
-                type="password"
-                maxlength="30"
-                required
-              ></b-input>
-            </b-field>
-            <b-field class="column one-half" label="Retype Password">
-              <b-input
-                value="123"
-                v-model="user.password"
-                type="password"
-                maxlength="30"
-                required
-              ></b-input>
-            </b-field>
+            <vs-input type="password" label="Password" v-model="user.password" required> </vs-input>
+            <vs-input type="password" label="Password" v-model="user.retypePassword" required>
+            </vs-input>
           </div>
 
           <div>
-            <b-button native-type="submit" class="is-primary">Signup</b-button>
-            <div class="mt-2" style="display: flex">
+            <vs-button
+              :loading="isCallingAPI"
+              size="large"
+              circle
+              :active="activeButton == 0"
+              type="submit"
+            >
+              Signup
+            </vs-button>
+
+            <div class="form-footer-wrapper">
               <h4 class="mr-2">Already have an account?</h4>
-              <router-link to="/login"><strong>Login</strong></router-link>
+              <vs-button to="/login" transparent circle> Login </vs-button>
             </div>
           </div>
         </form>
@@ -52,8 +42,8 @@
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue';
-import axios from 'axios';
+import Navbar from "@/components/Navbar.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -61,34 +51,54 @@ export default {
   },
   data() {
     return {
+      activeButton: 0,
+      isCallingAPI: false,
       user: {
-        name: '',
-        email: '',
-        username: '',
-        password: '',
-        retypePassword: '',
+        name: "",
+        email: "",
+        username: "",
+        password: "",
+        retypePassword: "",
       },
     };
   },
   methods: {
     async handleUsersignup() {
-      const res = await this.$axios.post(`${process.env.VUE_APP_API_URL}/api/auth`,this.user);
-      if(!res.data.error){
-        this.$toast.open({
-            message:res.data.message
-        })
-        setTimeout(() => {
-            this.$router.push('/login');
-        }, 2000);
+      this.isCallingAPI = true;
+      try {
+        const res = await this.$axios.post(`${process.env.VUE_APP_API_URL}/api/auth`, this.user);
+        if (!res.data.error) {
+          this.$vs.notification({
+            title: res.data.message,
+            text: "Redirecting...",
+            duration: 2000,
+            color: "primary",
+          });
+          setTimeout(() => {
+            this.$router.push("/login");
+          }, 2000);
+        }
+      } catch (error) {
+        this.$vs.notification({
+          title: "Error",
+          text: "Something went wrong.",
+          color: "danger",
+          duration: 2000,
+          square: true,
+        });
+      } finally {
+        this.isCallingAPI = false;
       }
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 section {
-  height: calc(100vh - 4rem);
+  background-color: #edf2f7;
+  // height: calc(100vh - 4rem);
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,9 +117,37 @@ section {
     }
 
     form {
-      width: 100%;
-      .field .label {
-        font-weight: 300;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 5px;
+      box-shadow: 12px 0px 10px -10px rgba(0, 0, 0, var(--vs-shadow-opacity));
+      .vs-input-parent {
+        margin: 2rem 0 !important;
+
+        label {
+          font-size: 16px;
+        }
+
+        .vs-input-content {
+          .vs-input {
+            margin-top: 4px;
+            padding: 10px;
+            min-width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+          }
+        }
+      }
+      .form-footer-wrapper {
+        display: flex;
+        align-items: center;
+        margin-top: 2rem;
+
+        .vs-button {
+          margin-left: 8px;
+          font-weight: 500;
+          font-size: 14px;
+        }
       }
     }
   }

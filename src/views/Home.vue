@@ -1,18 +1,18 @@
 <template>
   <div class="home">
-    <Navbar/>
-    <div class="container">
-    <h4>Type<span>Wars</span></h4>
-    <p>An online multiplayer competitive typing game.</p>
-    </div>
+    <Navbar />
+    <el-container>
+      <h4>Type<span>Wars</span></h4>
+      <p>An online multiplayer competitive typing game.</p>
+    </el-container>
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue';
+import Navbar from "@/components/Navbar.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     Navbar,
   },

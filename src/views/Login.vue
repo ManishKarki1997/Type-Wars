@@ -3,30 +3,19 @@
     <Navbar />
     <section>
       <div class="login-form-wrapper">
-          <div class="mb-4 form-header-wrapper">
+        <div class="mb-4 form-header-wrapper">
           <h4>Login to your account</h4>
         </div>
         <form @submit.prevent="handleUserLogin">
-          <b-field label="Username">
-            <b-input v-model="user.username" maxlength="30" required></b-input>
-          </b-field>
+          <vs-input type="text" label="Username" v-model="user.username"> </vs-input>
 
-          <b-field label="Password">
-            <b-input
-              value="123"
-              v-model="user.password"
-              type="password"
-              maxlength="30"
-              required
-            ></b-input>
-          </b-field>
-
+          <vs-input type="password" label="Password" v-model="user.password"> </vs-input>
           <div>
-            <b-button native-type="submit" class="is-primary">Login</b-button>
+            <vs-button :loading="isCallingAPI" size="large" active type="submit"> Login </vs-button>
 
-            <div class="mt-4" style="display:flex;">
-                <h4 class="mr-2">Don't have an account?</h4>
-                <router-link to="/signup"><strong>Signup</strong></router-link>
+            <div class="form-footer-wrapper">
+              <h4>Don't have an account?</h4>
+              <vs-button to="/signup" size="large" transparent circle> Signup </vs-button>
             </div>
           </div>
         </form>
@@ -36,8 +25,8 @@
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue';
-import Cookies from 'js-cookie'
+import Navbar from "@/components/Navbar.vue";
+import Cookies from "js-cookie";
 
 export default {
   components: {
@@ -45,49 +34,73 @@ export default {
   },
   data() {
     return {
+      isCallingAPI: false,
+      activeButton: 0,
+
       user: {
-        username: '',
-        password: '',
+        username: "",
+        password: "",
       },
     };
   },
   methods: {
     async handleUserLogin() {
-    const res = await this.$axios.post(`${process.env.VUE_APP_API_URL}/api/auth/login`,this.user);
-      if(!res.data.error){
-        this.$toast.open({
-            type:"success",
-            message:res.data.message,
-        })
-        Cookies.set("token", res.data.payload.token);
-        this.$store.commit("user/SET_USER",{
-            isLoggedIn: true,
-            user:res.data.payload.user,
-            token: res.data.payload.token
-        });
+      this.isCallingAPI = true;
 
-        setTimeout(() => {
-            this.$router.push('/app/dashboard');
-        }, 2000);
+      try {
+        const res = await this.$axios.post(
+          `${process.env.VUE_APP_API_URL}/api/auth/login`,
+          this.user
+        );
+        if (!res.data.error) {
+          this.$vs.notification({
+            title: res.data.message,
+            text: "Redirecting...",
+            duration: 2000,
+            color: "primary",
+          });
+
+          Cookies.set("token", res.data.payload.token);
+          this.$store.commit("user/SET_USER", {
+            isLoggedIn: true,
+            user: res.data.payload.user,
+            token: res.data.payload.token,
+          });
+
+          setTimeout(() => {
+            this.$router.push("/app/dashboard");
+          }, 2000);
+        }
+      } catch (error) {
+        this.$vs.notification({
+          title: "Error",
+          text: "Something went wrong.",
+          color: "danger",
+          duration: 2000,
+          square: true,
+        });
+      } finally {
+        this.isCallingAPI = false;
       }
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
 section {
-  height: calc(100vh - 4rem);
+  // height: calc(100vh - 4rem);
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #edf2f7;
 
   .login-form-wrapper {
     width: 25%;
     margin: 0 auto;
 
-     .form-header-wrapper {
+    .form-header-wrapper {
       text-align: center;
       h4 {
         font-weight: bold;
@@ -97,7 +110,39 @@ section {
     }
 
     form {
-      width: 100%;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 5px;
+      box-shadow: 12px 0px 10px -10px rgba(0, 0, 0, var(--vs-shadow-opacity));
+      .vs-input-parent {
+        margin: 2rem 0 !important;
+
+        label {
+          font-size: 16px;
+        }
+
+        .vs-input-content {
+          .vs-input {
+            margin-top: 4px;
+            padding: 10px;
+            min-width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+          }
+        }
+      }
+
+      .form-footer-wrapper {
+        display: flex;
+        align-items: center;
+        margin-top: 2rem;
+
+        .vs-button {
+          margin-left: 8px;
+          font-weight: 500;
+          font-size: 14px;
+        }
+      }
     }
   }
 }
