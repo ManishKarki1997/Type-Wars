@@ -1,6 +1,5 @@
 import Vue from "vue";
 import axios from "axios";
-import VueToast from "vue-toast-notification";
 import Cookies from "js-cookie";
 import App from "./App.vue";
 import router from "./router";
@@ -9,6 +8,10 @@ import "material-icons/iconfont/material-icons.css";
 import Vuesax from "vuesax";
 import "vuesax/dist/vuesax.css";
 import VueSocketIO from "vue-socket.io";
+
+import VueToast from 'vue-toast-notification';
+// import 'vue-toast-notification/dist/theme-default.css';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 require("@/assets/css/main.scss");
 
@@ -34,6 +37,7 @@ Vue.use(VueToast, {
   duration: 2000,
   type: "info",
 });
+
 Vue.use(Vuesax, {});
 
 Vue.use(

@@ -46,13 +46,15 @@ export default {
           this.user
         );
         if (!res.data.error) {
-          this.$vs.notification({
-            title: res.data.message,
-            text: "Redirecting...",
-            duration: 2000,
-            color: "primary",
-          });
+          // this.$vs.notification({
+          //   title: res.data.message,
+          //   duration: 2000,
+          //   color: "success",
+          //   position:'top-right',
+          // });
 
+this.$toast.success(res.data.message
+)
           Cookies.set("token", res.data.payload.token);
           this.$store.commit("user/SET_USER", {
             isLoggedIn: true,
@@ -65,13 +67,10 @@ export default {
           }, 2000);
         }
       } catch (error) {
-        this.$vs.notification({
-          title: "Error",
-          text: "Something went wrong.",
-          color: "danger",
-          duration: 2000,
-          square: true,
-        });
+        this.$toast.error(
+  error.response.data.message
+)
+      
       } finally {
         this.isCallingAPI = false;
       }

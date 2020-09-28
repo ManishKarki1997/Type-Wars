@@ -65,24 +65,19 @@ export default {
       try {
         const res = await this.$axios.post(`${process.env.VUE_APP_API_URL}/api/auth`, this.user);
         if (!res.data.error) {
-          this.$vs.notification({
-            title: res.data.message,
-            text: "Redirecting...",
-            duration: 2000,
-            color: "primary",
-          });
+          
+this.$toast.success(
+   res.data.message)
+      
           setTimeout(() => {
             this.$router.push("/login");
           }, 2000);
         }
       } catch (error) {
-        this.$vs.notification({
-          title: "Error",
-          text: error.response.data.message,
-          color: "danger",
-          duration: 2000,
-          square: true,
-        });
+          this.$toast.error( error.response.data.message
+)
+       
+        // });
       } finally {
         this.isCallingAPI = false;
       }

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from '../store'
 import LandingPage from "../views/LandingPage.vue";
 import Feed from "../views/App/Feed.vue";
 
@@ -11,6 +12,7 @@ const AuthGuard = (to, from, next) => {
   if (Cookies.get("token")) {
     next();
   } else {
+    store.commit("user/LOGOUT");
     next("/login");
   }
 };
