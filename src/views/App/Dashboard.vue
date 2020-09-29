@@ -27,5 +27,6 @@ export default {
       this.$store.commit("user/SET_ONLINE_USERS", transformedOnlineUsers);
     },
   },
+ 
 };
 </script>

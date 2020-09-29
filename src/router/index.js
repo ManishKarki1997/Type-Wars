@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import store from '../store'
+import store from "../store";
 import LandingPage from "../views/LandingPage.vue";
 import Feed from "../views/App/Feed.vue";
 
@@ -62,6 +62,12 @@ const routes = [
         path: "leaderboards",
         // component: view("App/Leaderboards.vue"),
         component: () => import(/* webpackChunkName: "Leaderboards" */ "../views/App/Leaderboards"),
+      },
+      {
+        name: "Game",
+        path: "game",
+        // component: view("App/Leaderboards.vue"),
+        component: () => import(/* webpackChunkName: "Leaderboards" */ "../views/App/Game"),
       },
     ],
   },

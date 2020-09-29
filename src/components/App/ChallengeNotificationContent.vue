@@ -1,21 +1,19 @@
 <template>
   <div class="challenge-notification-content">
-    <p>
-      <strong>{{ newChallengeData.challenger.name }}</strong> challenged you to a game.
-    </p>
+    <!-- <p>
+    </p> -->
     <div class="challenger-details">
-      <vs-avatar circle size="35">
-        <img :src="newChallengeData.challenger.avatar" alt="User Avatar" />
+      <vs-avatar circle size="40">
+        <img :src="challengeData.challenger.avatar" alt="User Avatar" />
       </vs-avatar>
       <div>
-        <h4>{{ newChallengeData.challenger.name }}</h4>
-      </div>
-    </div>
-    <p class="challenger-message">&ldquo;{{ newChallengeData.message }}&rdquo;</p>
-
+        <strong>{{ challengeData.challenger.name }}</strong> challenged you to a game.
+    <p class="challenger-message">{{ challengeData.message }}</p>
     <div class="user-action-buttons-wrapper">
-      <vs-button> Accept </vs-button>
-      <vs-button transparent> Reject </vs-button>
+      <vs-button @click="challengeDecision('ACCEPT')"> Accept </vs-button>
+      <vs-button @click="challengeDecision('REJECT')" transparent shadow> Reject </vs-button>
+    </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,21 +22,34 @@
 import store from "../../store";
 
 export default {
+  props:{
+    challengeData:{
+      type:Object,
+      required : true
+    }
+  },
   computed: {
-    newChallengeData() {
-      return store.state.game.newChallengeData;
-    },
+    // challengeData() {
+    //   return store.state.game.challengeData;
+    // },
   },
 
   data() {
     return {};
+  },
+  methods: {
+    challengeDecision(decision) {
+      this.$socket.emit("CHALLENGE_DECISION", {
+        ...this.challengeData,
+        decision,
+      });
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .challenge-notification-content {
-  padding: 1rem;
   min-width: 400px;
 
   .challenger-details {
@@ -51,7 +62,9 @@ export default {
   }
 
   .challenger-message {
-    margin-top: 8px;
+    margin-top: -4px;
+    margin-bottom: 8px;
+    color: rgb(240, 236, 236);
   }
 
   .user-action-buttons-wrapper {

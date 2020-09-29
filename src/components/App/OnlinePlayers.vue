@@ -81,7 +81,7 @@ export default {
     ChallengeNotificationContent,
   },
   computed: {
-    ...mapState("user", ["user", "onlineUsers"]),
+    ...mapState("user", ["user", "onlineUsers", "socketId"]),
   },
   data() {
     return {
@@ -94,23 +94,52 @@ export default {
   },
   sockets: {
     SOMEONE_CHALLEGED_YOU(challengeData) {
-      this.$store.commit("game/ADD_NEW_CHALLENGE_REQUEST", challengeData);
+      // this.$store.commit("game/ADD_NEW_CHALLENGE_REQUEST", challengeData);
 
-      const noti = this.$vs.notification({
-        width: "auto",
-        duration: "none",
-        content: ChallengeNotificationContent,
-      });
+      this.$toast.info({
+        component: ChallengeNotificationContent,
+        props:{
+          challengeData,
+        },
+        
+      },{
+        timeout: false,
+        icon:false,
+      })
+
+      // const noti = this.$vs.notification({
+      //   width: "auto",
+      //   duration: "none",
+      //   content: ChallengeNotificationContent,
+      // });
+    },
+    CHALLENGE_DECISION(challengeDecisionData) {
+      let notificationMessage = "";
+      if (challengeDecisionData.decision === "ACCEPT") {
+        notificationMessage = `${challengeDecisionData.challengedUser.name} has accepted your challenge.`;
+        this.$toast.success(notificationMessage);
+        this.handleChallengeAccepted(challengeDecisionData);
+      } else {
+        notificationMessage = `${challengeDecisionData.challengedUser.name} has rejected your challenge.`;
+        this.$toast.info(notificationMessage);
+      }
+    },
+    GAME_IS_STARTING(data) {
+      this.$store.commit("game/setActiveGameDetails", data);
+      this.$router.push({ path: "game", query: { roomId: data.roomId } });
     },
   },
   methods: {
+    handleChallengeAccepted(challengeDecisionData) {
+      this.$socket.emit("CHALLENGER_SIGNAL_TO_START_GAME", challengeDecisionData);
+    },
     handleChallengeUserClick(userSelectedForAGame) {
       this.userSelectedForAGame = userSelectedForAGame;
       this.showChallengeUserConfirmModal = true;
     },
     challengeUserForAGame() {
       const payload = {
-        challenger: this.user,
+        challenger: { ...this.user, socketId: this.socketId },
         challengedUser: this.userSelectedForAGame,
         message: this.challengeMessage,
       };
@@ -123,6 +152,7 @@ export default {
       this.$toast.success("Challenge request sent. Awaiting the decision.");
     },
   },
+
 };
 </script>
 

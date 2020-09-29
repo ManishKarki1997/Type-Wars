@@ -3,13 +3,15 @@ import axios from "axios";
 const UserModule = {
   namespaced: true,
   state: () => ({
-    challengeRequests: [],
     newChallengeData: null,
+    activeGameDetails: null,
   }),
   mutations: {
     ADD_NEW_CHALLENGE_REQUEST(state, challengeRequest) {
       state.newChallengeData = challengeRequest;
-      state.challengeRequests.push(challengeRequest);
+    },
+    setActiveGameDetails(state, payload) {
+      state.activeGameDetails = payload;
     },
   },
   actions: {},

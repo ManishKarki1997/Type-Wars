@@ -55,6 +55,7 @@ export default {
 
           this.$toast.success(res.data.message);
           Cookies.set("token", res.data.payload.token);
+
           this.$store.commit("user/SET_USER", {
             isLoggedIn: true,
             user: res.data.payload.user,
@@ -104,7 +105,7 @@ section {
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       }
       .vs-input-parent {
-        margin: 2rem 0 !important;
+        margin: 3rem 0 !important;
 
         label {
           font-size: 16px;
