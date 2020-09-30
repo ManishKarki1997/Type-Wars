@@ -1,11 +1,8 @@
 <template>
-  <div class="challenge-notification-content">
-    <!-- <p>
-    </p> -->
+  <!-- <div class="challenge-notification-content">
+ 
     <div class="challenger-details">
-      <vs-avatar circle size="40">
-        <img :src="challengeData.challenger.avatar" alt="User Avatar" />
-      </vs-avatar>
+      
       <div>
         <strong>{{ challengeData.challenger.name }}</strong> challenged you to a game.
     <p class="challenger-message">{{ challengeData.message }}</p>
@@ -15,6 +12,26 @@
     </div>
       </div>
     </div>
+  </div> -->
+  <div class="flex">
+    <div class="w-1/6 mr-4">
+      <vs-avatar circle size="60">
+        <img :src="challengeData.challenger.avatar" alt="User Avatar" />
+      </vs-avatar>
+    </div>
+    <div class="w-5/6">
+      <strong>{{ challengeData.challenger.name }}</strong> challenged you to a game.
+      <!-- <p class="italic">{{ challengeData.message }}</p> -->
+      <div class="mt-2 flex items-center">
+        <button
+          class="px-6 py-1 bg-gray-200 text-black rounded-sm mr-4"
+          @click="challengeDecision('ACCEPT')"
+        >
+          Accept
+        </button>
+        <button @click="challengeDecision('REJECT')">Reject</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -22,11 +39,11 @@
 import store from "../../store";
 
 export default {
-  props:{
-    challengeData:{
-      type:Object,
-      required : true
-    }
+  props: {
+    challengeData: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     // challengeData() {

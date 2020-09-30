@@ -96,22 +96,18 @@ export default {
     SOMEONE_CHALLEGED_YOU(challengeData) {
       // this.$store.commit("game/ADD_NEW_CHALLENGE_REQUEST", challengeData);
 
-      this.$toast.info({
-        component: ChallengeNotificationContent,
-        props:{
-          challengeData,
+      this.$toast(
+        {
+          component: ChallengeNotificationContent,
+          props: {
+            challengeData,
+          },
         },
-        
-      },{
-        timeout: false,
-        icon:false,
-      })
-
-      // const noti = this.$vs.notification({
-      //   width: "auto",
-      //   duration: "none",
-      //   content: ChallengeNotificationContent,
-      // });
+        {
+          timeout: false,
+          icon: false,
+        }
+      );
     },
     CHALLENGE_DECISION(challengeDecisionData) {
       let notificationMessage = "";
@@ -149,10 +145,11 @@ export default {
       this.userSelectedForAGame = null;
       this.showChallengeUserConfirmModal = false;
 
-      this.$toast.success("Challenge request sent. Awaiting the decision.");
+      this.$toast.success("Challenge request sent. Awaiting the decision.", {
+        timeout: 3000,
+      });
     },
   },
-
 };
 </script>
 

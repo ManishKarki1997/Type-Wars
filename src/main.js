@@ -9,18 +9,17 @@ import Vuesax from "vuesax";
 import "vuesax/dist/vuesax.css";
 import VueSocketIO from "vue-socket.io";
 require("@/assets/css/main.scss");
+import "@/assets/css/tailwind.css";
 
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
-
 Vue.use(Toast, {
   transition: "Vue-Toastification__bounce",
   maxToasts: 20,
-  timeout:3000,
+  timeout: 3000,
   hideProgressBar: true,
 });
-
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 
