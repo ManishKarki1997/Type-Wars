@@ -1,6 +1,5 @@
 <template>
-  <div class="w-full h-screen flex flex-col">
-    <!-- <pre>{{ opponentDetails }}</pre> -->
+  <div class="w-full flex flex-col">
     <div class="w-full bg-white rounded shadow flex hover:shadow-md">
       <div class="w-3/12 h-24">
         <img :src="opponentDetails.avatar" alt="" class="w-full h-full rounded-sm object-cover" />
@@ -15,7 +14,7 @@
         <div>
           <vs-tooltip circle top class="flex items-center w-6 mt-2 cursor-pointer">
             <SmileIcon class="w-6 h-6" />
-            <template #tooltip> Taunt the user with a gif </template>
+            <template #tooltip> Taunt {{ opponentDetails.username }} with a gif </template>
           </vs-tooltip>
         </div>
       </div>

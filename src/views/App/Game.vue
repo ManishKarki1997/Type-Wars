@@ -1,7 +1,7 @@
 <template>
-  <div class="game-page-wrapper bg-gray-200 h-screen px-16">
+  <div class="game-page-wrapper px-16 bg-gray-200 overflow-hidden">
     <div class="flex justify-between py-8">
-      <div class="w-9/12 h-screen">
+      <div class="w-9/12">
         <MatchArea />
       </div>
       <div class="w-3/12 ml-4">
