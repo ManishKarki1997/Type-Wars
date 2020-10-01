@@ -94,6 +94,14 @@ export default {
       immediate: true,
       deep: true,
       handler(newTypedLetter, oldTypedLetter) {
+        if (oldTypedLetter && !newTypedLetter) {
+          oldTypedLetter.split("").forEach((letter, i) => {
+            const currentTextElement = document.querySelector(`.text-${i}`);
+            currentTextElement.classList.remove("bg-red-200");
+            currentTextElement.classList.remove("bg-green-200");
+          });
+          return;
+        }
         if (this.textToType.length == 0) return;
         this.textToType.map((letter, i) => {
           if (i < newTypedLetter.length) {
