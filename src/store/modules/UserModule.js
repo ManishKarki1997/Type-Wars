@@ -9,6 +9,11 @@ const UserModule = {
     token: null,
     socketId: "",
     onlineUsers: [],
+    userGameDetails: {
+      accuracy: 0,
+      wpm: 0,
+      completion: 0,
+    },
   }),
   mutations: {
     SET_USER(state, { isLoggedIn, user, token }) {
@@ -27,6 +32,9 @@ const UserModule = {
     },
     SET_ONLINE_USERS(state, users) {
       state.onlineUsers = users;
+    },
+    SET_USER_GAME_DETAILS(state, userGameDetails) {
+      state.userGameDetails = { ...userGameDetails };
     },
   },
   actions: {},

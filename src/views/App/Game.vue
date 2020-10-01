@@ -61,6 +61,7 @@ export default {
     return {
       roomId: "",
       countdownTimer: 0,
+      gameCountdown: 0,
       gameHasStarted: false,
       showIntroScreen: true,
     };

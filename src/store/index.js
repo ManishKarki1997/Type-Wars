@@ -9,7 +9,7 @@ Vue.use(Vuex);
 const vuexLocal = new VuexPersistence({
   key: "TYPEWARS_VUEX",
   storage: window.localStorage,
-  modules: ["user", "game"],
+  // modules: ["user", "game"],
 });
 
 export default new Vuex.Store({

@@ -49,7 +49,7 @@ import { mapState } from "vuex";
 
 export default {
   computed: {
-    ...mapState("user", ["user"]),
+    ...mapState("user", ["user", "userGameDetails"]),
     ...mapState("game", ["activeGameDetails"]),
     opponentDetails() {
       return this.activeGameDetails[
@@ -63,9 +63,23 @@ export default {
     return {
       textToType: [],
       userTypedText: "",
+      gameCountdown: 0,
+      accurateLettersTyped: 0,
     };
   },
-  methods: {},
+  methods: {
+    startGameCountdown() {
+      setTimeout(() => {
+        this.gameCountdown += 1;
+        this.$store.commit("user/SET_USER_GAME_DETAILS", {
+          ...this.userGameDetails,
+          wpm: Math.floor(this.accurateLettersTyped / 5 / (this.gameCountdown / 60)),
+        });
+        // this.$store.dispatch("game/SET_GAME_COUNTDOWN", this.gameCountdown);
+        this.startGameCountdown();
+      }, 1000);
+    },
+  },
   created() {
     const textToType = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi accusamus recusandae quas est
         assumenda illum sapiente atque culpa soluta vero error a cum, corrupti repudiandae ut amet
@@ -73,6 +87,7 @@ export default {
         quibusdam dolorum?`;
 
     this.textToType = textToType.split("");
+    this.startGameCountdown();
   },
   watch: {
     userTypedText: {
@@ -99,6 +114,25 @@ export default {
           lastDeletedLetterElement.classList.remove("bg-red-200");
           lastDeletedLetterElement.classList.remove("bg-green-200");
         }
+
+        const textToTypeWhitespaceRemoved = this.textToType.join("");
+
+        const accurateLettersTyped = textToTypeWhitespaceRemoved
+          .split("")
+          .filter((l, i) => l === newTypedLetter[i]).length;
+
+        const accuracy = Math.floor((accurateLettersTyped / this.userTypedText.length) * 100) || 0;
+        const completion =
+          Math.floor((this.userTypedText.length / this.textToType.length) * 100) || 0;
+        const wpm = Math.floor(accurateLettersTyped / 5 / (this.gameCountdown / 60)) || 0;
+
+        this.accurateLettersTyped = accurateLettersTyped;
+
+        this.$store.commit("user/SET_USER_GAME_DETAILS", {
+          accuracy,
+          wpm,
+          completion,
+        });
       },
     },
   },

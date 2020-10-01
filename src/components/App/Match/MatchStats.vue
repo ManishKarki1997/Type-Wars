@@ -35,11 +35,11 @@
       </div>
 
       <div class="flex align-center justify-evenly">
-        <h2 class="font-bold text-3xl">90</h2>
+        <h2 class="font-bold text-3xl">{{ userGameDetails.wpm }}</h2>
 
-        <h2 class="font-bold text-4xl">80%</h2>
+        <h2 class="font-bold text-4xl">{{ userGameDetails.completion }}%</h2>
 
-        <h2 class="font-bold text-3xl">85%</h2>
+        <h2 class="font-bold text-3xl">{{ userGameDetails.accuracy }}%</h2>
       </div>
     </div>
 
@@ -69,7 +69,7 @@ export default {
     SmileIcon,
   },
   computed: {
-    ...mapState("user", ["user"]),
+    ...mapState("user", ["user", "userGameDetails"]),
     ...mapState("game", ["activeGameDetails"]),
     opponentDetails() {
       return this.activeGameDetails[

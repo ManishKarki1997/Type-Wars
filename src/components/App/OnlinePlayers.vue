@@ -121,7 +121,7 @@ export default {
       }
     },
     GAME_IS_STARTING(data) {
-      this.$store.commit("game/setActiveGameDetails", data);
+      this.$store.commit("game/SET_ACTIVE_GAME_DETAILS", data);
       this.$router.push({ path: "game", query: { roomId: data.roomId } });
     },
   },
