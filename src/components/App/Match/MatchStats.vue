@@ -91,24 +91,29 @@ export default {
   },
   data() {
     return {
+      textToType: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi accusamus recusandae quas est
+        assumenda illum sapiente atque culpa soluta vero error a cum, corrupti repudiandae ut amet
+        doloremque eveniet itaque, laudantium aliquam quibusdam? Similique aut deleniti magnam ipsam
+        quibusdam dolorum?`,
       opponentTypingDetails: {
         accuracy: 0,
         completion: 0,
-        currentlyInIndex: 0,
         wpm: 0,
+        typedText: null,
       },
     };
   },
   sockets: {
     OPPONENT_TYPING_DATA(data) {
-      const { accuracy, completion, index, wpm } = data;
+      const { accuracy, completion, wpm, typedText } = data;
       this.opponentTypingDetails = {
         accuracy,
         completion,
-        index,
         wpm,
+        typedText,
       };
     },
   },
+  methods: {},
 };
 </script>

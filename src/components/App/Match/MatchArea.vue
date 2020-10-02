@@ -11,11 +11,7 @@
       </div>
       <div class="5/6">
         <vs-tooltip circle top>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta sunt aliquam vero odit
-            iusto dolores esse eligendi soluta mollitia atque? Quae beatae placeat ratione
-            laudantium facere neque accusamus, omnis quo saepe nobis! Sit, maiores culpa.
-          </p>
+          <p class="opponent-typed-text-p"></p>
           <template #tooltip> Opponent's progress </template>
         </vs-tooltip>
       </div>
@@ -65,6 +61,8 @@ export default {
       userTypedText: "",
       gameCountdown: 0,
       accurateLettersTyped: 0,
+      opponentTypedText: "",
+      opponentTypedLetters: [],
     };
   },
   methods: {
@@ -90,11 +88,20 @@ export default {
     this.textToType = textToType.split("");
     this.startGameCountdown();
   },
+
+  sockets: {
+    OPPONENT_TYPING_DATA(data) {
+      const { typedText } = data;
+      this.opponentTypedText = typedText;
+    },
+  },
+
   watch: {
     userTypedText: {
       immediate: true,
       deep: true,
       handler(newTypedLetter, oldTypedLetter) {
+        if (this.textToType.length == 0) return;
         if (oldTypedLetter && !newTypedLetter) {
           oldTypedLetter.split("").forEach((letter, i) => {
             const currentTextElement = document.querySelector(`.text-${i}`);
@@ -112,14 +119,15 @@ export default {
             accuracy: 0,
             wpm: 0,
             completion: 0,
-            index: 0,
+            typedText: "",
             intendedTo: {
               ...this.opponentDetails,
             },
           });
           return;
         }
-        if (this.textToType.length == 0) return;
+        if (!newTypedLetter) return;
+
         this.textToType.map((letter, i) => {
           if (i < newTypedLetter.length) {
             const currentTextElement = document.querySelector(`.text-${i}`);
@@ -164,11 +172,49 @@ export default {
           accuracy,
           wpm,
           completion,
-          index: this.userTypedText.length,
+          typedText: this.userTypedText,
           intendedTo: {
             ...this.opponentDetails,
           },
         });
+      },
+    },
+
+    opponentTypedText: {
+      immediate: true,
+      handler(newTypedText, oldTypedText) {
+        // just entered the route. so don't proceed further since nothing is typed;
+        if (!oldTypedText && !newTypedText) return;
+
+        // user pressed backspace(i.e. deleted a word)
+        if (oldTypedText && newTypedText && oldTypedText.length > newTypedText.length) {
+          document.querySelector(`.opponent-text-${this.opponentTypedLetters.length - 2}`).remove();
+          this.opponentTypedLetters.splice(this.opponentTypedLetters.length - 1);
+        } else if (oldTypedText && !newTypedText) {
+          // user selected all text and deleted them
+          // so remove the text from the UI altogether
+          document.querySelector(".opponent-typed-text-p").textContent = "";
+          this.opponentTypedLetters = [];
+        } else {
+          // user is typing, so determine if the sequence is correct or not
+          // and add relevant background color
+          const newTypedLetter = newTypedText[newTypedText.length - 1];
+
+          if (newTypedLetter === this.textToType[this.opponentTypedLetters.length]) {
+            const spanElement = document.createElement("span");
+            spanElement.classList.add("bg-green-200");
+            spanElement.classList.add(`opponent-text-${this.opponentTypedLetters.length - 1}`);
+            spanElement.textContent = newTypedLetter;
+            document.querySelector(".opponent-typed-text-p").append(spanElement);
+          } else {
+            const spanElement = document.createElement("span");
+            spanElement.classList.add("bg-red-200");
+            spanElement.classList.add(`opponent-text-${this.opponentTypedLetters.length - 1}`);
+            spanElement.textContent = newTypedLetter;
+            document.querySelector(".opponent-typed-text-p").append(spanElement);
+          }
+          this.opponentTypedLetters.push(newTypedLetter);
+        }
       },
     },
   },
