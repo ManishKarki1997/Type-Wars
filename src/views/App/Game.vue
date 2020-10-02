@@ -1,5 +1,5 @@
 <template>
-  <div class="game-page-wrapper px-16 bg-gray-200 overflow-hidden">
+  <div class="game-page-wrapper lg:px-16 md:px-4 bg-gray-200 overflow-hidden">
     <div class="flex justify-between py-8">
       <div class="w-9/12">
         <MatchArea />

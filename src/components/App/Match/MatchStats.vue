@@ -22,24 +22,34 @@
 
     <div class="shadow bg-white rounded-lg px-4 py-4 my-16 hover:shadow-md">
       <div class="flex align-center justify-evenly">
-        <h2 class="font-bold text-3xl">97</h2>
+        <h2 class="font-bold lg:text-3xl md:text-2xl sm:text-xl">
+          {{ opponentTypingDetails.wpm }}
+        </h2>
 
-        <h2 class="font-bold text-4xl">75%</h2>
+        <h2 class="font-bold lg:text-4xl md:text-2xl sm:text-xl">
+          {{ opponentTypingDetails.completion }}%
+        </h2>
 
-        <h2 class="font-bold text-3xl">80%</h2>
+        <h2 class="font-bold lg:text-3xl md:text-2xl sm:text-xl">
+          {{ opponentTypingDetails.accuracy }}%
+        </h2>
       </div>
       <div class="flex items-center justify-evenly my-1">
-        <p>WPM</p>
-        <p>Completed</p>
-        <p>Accuracy</p>
+        <p class="sm:text-xs md:text-sm lg:text-base">WPM</p>
+        <p class="sm:text-xs md:text-sm lg:text-base">Completed</p>
+        <p class="sm:text-xs md:text-sm lg:text-base">Accuracy</p>
       </div>
 
       <div class="flex align-center justify-evenly">
-        <h2 class="font-bold text-3xl">{{ userGameDetails.wpm }}</h2>
+        <h2 class="font-bold lg:text-3xl md:text-2xl sm:text-xl">{{ userGameDetails.wpm }}</h2>
 
-        <h2 class="font-bold text-4xl">{{ userGameDetails.completion }}%</h2>
+        <h2 class="font-bold lg:text-4xl md:text-2xl sm:text-xl text-4xl">
+          {{ userGameDetails.completion }}%
+        </h2>
 
-        <h2 class="font-bold text-3xl">{{ userGameDetails.accuracy }}%</h2>
+        <h2 class="font-bold lg:text-3xl md:text-2xl sm:text-xl">
+          {{ userGameDetails.accuracy }}%
+        </h2>
       </div>
     </div>
 
@@ -77,6 +87,27 @@ export default {
           (key) => this.activeGameDetails[key].email !== this.user.email
         )
       ];
+    },
+  },
+  data() {
+    return {
+      opponentTypingDetails: {
+        accuracy: 0,
+        completion: 0,
+        currentlyInIndex: 0,
+        wpm: 0,
+      },
+    };
+  },
+  sockets: {
+    OPPONENT_TYPING_DATA(data) {
+      const { accuracy, completion, index, wpm } = data;
+      this.opponentTypingDetails = {
+        accuracy,
+        completion,
+        index,
+        wpm,
+      };
     },
   },
 };

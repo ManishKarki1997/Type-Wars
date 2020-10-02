@@ -71,11 +71,12 @@ export default {
     startGameCountdown() {
       setTimeout(() => {
         this.gameCountdown += 1;
-        this.$store.commit("user/SET_USER_GAME_DETAILS", {
-          ...this.userGameDetails,
-          wpm: Math.floor(this.accurateLettersTyped / 5 / (this.gameCountdown / 60)),
-        });
-        // this.$store.dispatch("game/SET_GAME_COUNTDOWN", this.gameCountdown);
+        if (this.userTypedText.length > 0) {
+          this.$store.commit("user/SET_USER_GAME_DETAILS", {
+            ...this.userGameDetails,
+            wpm: Math.floor(this.accurateLettersTyped / 5 / (this.gameCountdown / 60)),
+          });
+        }
         this.startGameCountdown();
       }, 1000);
     },
@@ -99,6 +100,22 @@ export default {
             const currentTextElement = document.querySelector(`.text-${i}`);
             currentTextElement.classList.remove("bg-red-200");
             currentTextElement.classList.remove("bg-green-200");
+          });
+          this.$store.commit("user/SET_USER_GAME_DETAILS", {
+            accuracy: 0,
+            completion: 0,
+            wpm: 0,
+          });
+          this.$socket.emit("MY_TYPING_DATA", {
+            socketId: this.user.socketId,
+            user: { ...this.user },
+            accuracy: 0,
+            wpm: 0,
+            completion: 0,
+            index: 0,
+            intendedTo: {
+              ...this.opponentDetails,
+            },
           });
           return;
         }
@@ -130,9 +147,8 @@ export default {
           .filter((l, i) => l === newTypedLetter[i]).length;
 
         const accuracy = Math.floor((accurateLettersTyped / this.userTypedText.length) * 100) || 0;
-        const completion =
-          Math.floor((this.userTypedText.length / this.textToType.length) * 100) || 0;
-        const wpm = Math.floor(accurateLettersTyped / 5 / (this.gameCountdown / 60)) || 0;
+        const completion = Math.floor((this.userTypedText.length / this.textToType.length) * 100);
+        const wpm = Math.floor(accurateLettersTyped / 5 / (this.gameCountdown / 60));
 
         this.accurateLettersTyped = accurateLettersTyped;
 
@@ -140,6 +156,18 @@ export default {
           accuracy,
           wpm,
           completion,
+        });
+
+        this.$socket.emit("MY_TYPING_DATA", {
+          socketId: this.user.socketId,
+          user: { ...this.user },
+          accuracy,
+          wpm,
+          completion,
+          index: this.userTypedText.length,
+          intendedTo: {
+            ...this.opponentDetails,
+          },
         });
       },
     },
