@@ -1,24 +1,10 @@
-# typewars
+# TypeWars
 
-## Project setup
-```
-npm install
-```
+## [WIP]
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+A simple online multiplayer realtime typing battle game.
+Made with Vuejs on the frontend and Node & Socket IO in the backend.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+#### Demo
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![Demo CountPages alpha](https://media.giphy.com/media/yWzK3KeHQyjrseCkEH/giphy.gif)
