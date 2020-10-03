@@ -1,16 +1,18 @@
 <template>
   <div class="game-page-wrapper lg:px-16 md:px-4 bg-gray-200 overflow-hidden">
-    <div class="flex justify-between py-8">
+    <div class="flex justify-between py-8" v-if="!showIntroScreen && gameHasStarted">
       <div class="w-9/12">
         <MatchArea />
       </div>
       <div class="w-3/12 ml-4">
         <MatchStats />
       </div>
+
+      <MatchResults />
     </div>
 
-    <!-- <transition leave-active-class="fade-out">
-      <div class="intro-screen-wrapper" v-if="showIntroScreen">
+    <transition leave-active-class="fade-out" v-if="showIntroScreen">
+      <div class="intro-screen-wrapper">
         <div class="splash-wrapper">
           <div class="player-splash player-splash--left">
             <img src="https://w.wallhaven.cc/full/2e/wallhaven-2ero7g.jpg" alt="" />
@@ -41,7 +43,7 @@
           <h2>{{ countdownTimer }}</h2>
         </div>
       </div>
-    </transition> -->
+    </transition>
   </div>
 </template>
 
@@ -51,11 +53,13 @@ import { gsap, Linear, TweenLite } from "gsap";
 
 import MatchStats from "@/components/App/Match/MatchStats";
 import MatchArea from "@/components/App/Match/MatchArea";
+import MatchResults from "@/components/App/Match/MatchResults";
 
 export default {
   components: {
     MatchStats,
     MatchArea,
+    MatchResults,
   },
   data() {
     return {
@@ -90,18 +94,18 @@ export default {
         ease: Linear.ease,
       });
 
-      // gsap.to(".player-splash--right .player-details-wrapper", {
-      //   duration: 4,
-      //   y: 75,
-      //   opacity: 0.9,
-      //   ease: Linear.ease,
-      // });
-      // gsap.to(".player-splash--left .player-details-wrapper", {
-      //   duration: 4,
-      //   y: -75,
-      //   opacity: 0.9,
-      //   ease: Linear.ease,
-      // });
+      gsap.to(".player-splash--right .player-details-wrapper", {
+        duration: 4,
+        y: 75,
+        opacity: 0.9,
+        ease: Linear.ease,
+      });
+      gsap.to(".player-splash--left .player-details-wrapper", {
+        duration: 4,
+        y: -75,
+        opacity: 0.9,
+        ease: Linear.ease,
+      });
     },
   },
   methods: {
@@ -129,25 +133,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .game-page-wrapper {
-//   height: calc(100vh - 6rem);
-//   width: 100%;
+.game-page-wrapper {
+  height: calc(100vh - 6rem);
+  width: 100%;
 
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-//   .countdown-timer-wrapper {
-//     text-align: center;
-//     h2 {
-//       font-size: 7rem;
-//     }
-//     p {
-//       margin-bottom: -1rem;
-//       font-size: 1.5rem;
-//     }
-//   }
-// }
+  .countdown-timer-wrapper {
+    text-align: center;
+    h2 {
+      font-size: 7rem;
+    }
+    p {
+      margin-bottom: -1rem;
+      font-size: 1.5rem;
+    }
+  }
+}
 .fade-out {
   opacity: 0;
   transition-duration: 0.5s;

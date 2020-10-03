@@ -27,6 +27,12 @@ export default {
       this.$store.commit("user/SET_ONLINE_USERS", transformedOnlineUsers);
     },
   },
- 
+
+  mounted() {
+    this.$store.commit("game/SET_MATCH_RESULTS_MODAL", {
+      show: false,
+      opponentLeft: false,
+    });
+  },
 };
 </script>

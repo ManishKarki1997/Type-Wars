@@ -28,13 +28,21 @@
 
     <div class="w-full px-4 py-4 rounded mt-4">
       <textarea
+        onselectstart="return false"
+        onpaste="return false;"
+        onCopy="return false"
+        onCut="return false"
+        onDrag="return false"
+        onDrop="return false"
+        autocomplete="off"
         autofocus
-        class="bg-gray-100 w-full px-4 py-4 rounded shadow"
+        class="bg-gray-200 w-full px-4 py-4 rounded shadow border border-1 border-gray-600 disabled:bg-gray-300"
         name="typing-textbox"
         id="typing-textbox"
         cols="30"
         rows="10"
         v-model="userTypedText"
+        :disabled="userFinishedTyping"
       ></textarea>
     </div>
   </div>
@@ -42,10 +50,14 @@
 
 <script>
 import { mapState } from "vuex";
+import ChallengeNotificationContent from "@/components/App/ChallengeNotificationContent";
 
 export default {
+  components: {
+    ChallengeNotificationContent,
+  },
   computed: {
-    ...mapState("user", ["user", "userGameDetails"]),
+    ...mapState("user", ["user", "userGameDetails", "socketId"]),
     ...mapState("game", ["activeGameDetails"]),
     opponentDetails() {
       return this.activeGameDetails[
@@ -63,6 +75,7 @@ export default {
       accurateLettersTyped: 0,
       opponentTypedText: "",
       opponentTypedLetters: [],
+      userFinishedTyping: false,
     };
   },
   methods: {
@@ -90,9 +103,41 @@ export default {
   },
 
   sockets: {
+    SOMEONE_ASKED_FOR_A_REMATCH(challengeData) {
+      this.$toast(
+        {
+          component: ChallengeNotificationContent,
+          props: {
+            challengeData,
+            isARematch: true,
+          },
+        },
+        {
+          timeout: false,
+          icon: false,
+        }
+      );
+      this.$router.go(-1);
+    },
     OPPONENT_TYPING_DATA(data) {
-      const { typedText } = data;
+      const { typedText, accuracy, completion, wpm, user } = data;
       this.opponentTypedText = typedText;
+    },
+    OPPONENT_LEFT_THE_GAME(data) {
+      this.$store.commit("game/SET_MATCH_RESULTS", {
+        user: {
+          ...this.user,
+          ...this.userGameDetails,
+        },
+        opponentDetails: {
+          ...data,
+        },
+        winner: this.user.email,
+      });
+      this.$store.commit("game/SET_MATCH_RESULTS_MODAL", {
+        show: true,
+        opponentLeft: true,
+      });
     },
   },
 
@@ -101,6 +146,7 @@ export default {
       immediate: true,
       deep: true,
       handler(newTypedLetter, oldTypedLetter) {
+        if (this.userFinishedTyping) return;
         if (this.textToType.length == 0) return;
         if (oldTypedLetter && !newTypedLetter) {
           oldTypedLetter.split("").forEach((letter, i) => {
@@ -108,11 +154,13 @@ export default {
             currentTextElement.classList.remove("bg-red-200");
             currentTextElement.classList.remove("bg-green-200");
           });
+
           this.$store.commit("user/SET_USER_GAME_DETAILS", {
             accuracy: 0,
             completion: 0,
             wpm: 0,
           });
+
           this.$socket.emit("MY_TYPING_DATA", {
             socketId: this.user.socketId,
             user: { ...this.user },
@@ -177,6 +225,22 @@ export default {
             ...this.opponentDetails,
           },
         });
+
+        // if (this.userTypedText.length === this.textToType.length) {
+        if (this.userTypedText.length == 10) {
+          this.userFinishedTyping = true;
+          const payload = {
+            socketId: this.socketId,
+            ...this.user,
+            accuracy,
+            wpm,
+            completion,
+          };
+          this.$socket.emit("TYPING_FINISHED", {
+            roomId: this.activeGameDetails.roomId,
+            user: payload,
+          });
+        }
       },
     },
 

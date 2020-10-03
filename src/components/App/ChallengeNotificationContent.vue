@@ -1,18 +1,4 @@
 <template>
-  <!-- <div class="challenge-notification-content">
- 
-    <div class="challenger-details">
-      
-      <div>
-        <strong>{{ challengeData.challenger.name }}</strong> challenged you to a game.
-    <p class="challenger-message">{{ challengeData.message }}</p>
-    <div class="user-action-buttons-wrapper">
-      <vs-button @click="challengeDecision('ACCEPT')"> Accept </vs-button>
-      <vs-button @click="challengeDecision('REJECT')" transparent shadow> Reject </vs-button>
-    </div>
-      </div>
-    </div>
-  </div> -->
   <div class="flex">
     <div class="w-1/6 mr-4">
       <vs-avatar circle size="60">
@@ -20,7 +6,12 @@
       </vs-avatar>
     </div>
     <div class="w-5/6">
-      <strong>{{ challengeData.challenger.name }}</strong> challenged you to a game.
+      <h5 v-if="!isARematch">
+        <strong>{{ challengeData.challenger.name }}</strong> challenged you to a game.
+      </h5>
+      <h5 v-if="isARematch">
+        <strong>{{ challengeData.challenger.name }}</strong> asked for a rematch.
+      </h5>
       <!-- <p class="italic">{{ challengeData.message }}</p> -->
       <div class="mt-2 flex items-center">
         <button
@@ -44,11 +35,9 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  computed: {
-    // challengeData() {
-    //   return store.state.game.challengeData;
-    // },
+    isARematch: {
+      type: Boolean,
+    },
   },
 
   data() {
@@ -60,6 +49,7 @@ export default {
         ...this.challengeData,
         decision,
       });
+      this.$toast.clear();
     },
   },
 };

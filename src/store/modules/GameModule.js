@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 
 const UserModule = {
   namespaced: true,
@@ -6,6 +6,15 @@ const UserModule = {
     newChallengeData: null,
     activeGameDetails: null,
     gameCountdown: 0,
+    matchResultsModal:{
+      show:false,
+      opponentLeft:false, 
+    },
+    matchResults:{
+      userDetails:null,
+      opponentDetails:null,
+      winner: "",
+    }
   }),
   mutations: {
     ADD_NEW_CHALLENGE_REQUEST(state, challengeRequest) {
@@ -17,6 +26,18 @@ const UserModule = {
     SET_GAME_COUNTDOWN(state, gameCountdown) {
       state.gameCountdown = gameCountdown;
     },
+    SET_MATCH_RESULTS_MODAL(state, matchResultsModal){
+      state.matchResultsModal = {
+        ...state.matchResultsModal,
+        ...matchResultsModal
+      }
+    },
+    SET_MATCH_RESULTS(state,matchResults){
+      state.matchResults = {
+        ...state.matchResults,
+        ...matchResults
+      }
+    }
   },
   actions: {},
   getters: {},

@@ -19,6 +19,7 @@ Vue.use(Toast, {
   maxToasts: 20,
   timeout: 3000,
   hideProgressBar: true,
+  closeOnClick: false
 });
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;

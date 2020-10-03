@@ -52,7 +52,7 @@
             <!-- <p>some other user statistics</p> -->
           </div>
         </div>
-        <vs-input type="text" label="Challenge Message" v-model="challengeMessage"> </vs-input>
+        <!-- <vs-input type="text" label="Challenge Message" v-model="challengeMessage"> </vs-input> -->
       </div>
 
       <template #footer>
@@ -94,8 +94,6 @@ export default {
   },
   sockets: {
     SOMEONE_CHALLEGED_YOU(challengeData) {
-      // this.$store.commit("game/ADD_NEW_CHALLENGE_REQUEST", challengeData);
-
       this.$toast(
         {
           component: ChallengeNotificationContent,
@@ -109,7 +107,23 @@ export default {
         }
       );
     },
+    SOMEONE_ASKED_FOR_A_REMATCH(challengeData) {
+      this.$toast(
+        {
+          component: ChallengeNotificationContent,
+          props: {
+            challengeData,
+            isARematch: true,
+          },
+        },
+        {
+          timeout: false,
+          icon: false,
+        }
+      );
+    },
     CHALLENGE_DECISION(challengeDecisionData) {
+      this.$toast.clear();
       let notificationMessage = "";
       if (challengeDecisionData.decision === "ACCEPT") {
         notificationMessage = `${challengeDecisionData.challengedUser.name} has accepted your challenge.`;
