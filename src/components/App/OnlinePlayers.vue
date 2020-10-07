@@ -7,16 +7,26 @@
 
       <template #text>
         <transition-group class="online-users" name="list" tag="ul">
-          <li class="online-user" v-for="onlineUser in onlineUsers" :key="onlineUser.email">
+          <li
+            class="online-user"
+            v-for="onlineUser in onlineUsers"
+            :key="onlineUser.email"
+          >
             <vs-avatar circle size="35" badge badge-color="success">
-              <img :src="onlineUser.avatar" :alt="onlineUser.name + ' avatar image'" />
+              <img
+                :src="onlineUser.avatar"
+                :alt="onlineUser.name + ' avatar image'"
+              />
             </vs-avatar>
             <div class="user-details">
               <h4>{{ onlineUser.name }}</h4>
               <!-- <p>{{ user.email }}</p> -->
             </div>
 
-            <div class="user-actions-wrapper" v-if="onlineUser.email !== user.email">
+            <div
+              class="user-actions-wrapper"
+              v-if="onlineUser.email !== user.email"
+            >
               <vs-tooltip circle top class="icon-wrapper">
                 <GamepadIcon @click="handleChallengeUserClick(onlineUser)" />
                 <template #tooltip> Challenge for a game </template>
@@ -57,8 +67,14 @@
 
       <template #footer>
         <div class="con-footer">
-          <vs-button @click="challengeUserForAGame" active> Challenge </vs-button>
-          <vs-button @click="showChallengeUserConfirmModal = false" dark transparent>
+          <vs-button @click="challengeUserForAGame" active>
+            Challenge
+          </vs-button>
+          <vs-button
+            @click="showChallengeUserConfirmModal = false"
+            dark
+            transparent
+          >
             Cancel
           </vs-button>
         </div>
@@ -141,7 +157,10 @@ export default {
   },
   methods: {
     handleChallengeAccepted(challengeDecisionData) {
-      this.$socket.emit("CHALLENGER_SIGNAL_TO_START_GAME", challengeDecisionData);
+      this.$socket.emit(
+        "CHALLENGER_SIGNAL_TO_START_GAME",
+        challengeDecisionData
+      );
     },
     handleChallengeUserClick(userSelectedForAGame) {
       this.userSelectedForAGame = userSelectedForAGame;
@@ -163,6 +182,43 @@ export default {
         timeout: 3000,
       });
     },
+  },
+
+  mounted() {
+    const data = {
+      "manishkarki247@gmail.com": {
+        socketId: "U5KsllWWDYQ6k6rmAAAE",
+        avatar: "https://w.wallhaven.cc/full/ox/wallhaven-oxo7e9.png",
+        _id: "5f7b3e808c656a22f0527abb",
+        name: "Manish Karki",
+        email: "manishkarki247@gmail.com",
+        username: "StarScream97",
+        password:
+          "$2a$12$MEh1/.E9aRDTqg2kFLR8IOE1cC4OH2eLQxqX3g1ZM6Wca3Jys.Guy",
+        __v: 0,
+        accuracy: 10,
+        wpm: 2,
+        completion: 3,
+        userTypedErrors: 9,
+        userTypedLength: 10,
+      },
+      "skye247@gmail.com": {
+        socketId: "w5zVD9yJwl9WH-3qAAAD",
+        avatar: "https://w.wallhaven.cc/full/ox/wallhaven-oxo7e9.png",
+        _id: "5f7b42edc185f529b089afd3",
+        name: "Skye",
+        email: "skye247@gmail.com",
+        username: "skye247",
+        password:
+          "$2a$12$.IDoddRKeAxQD.pkoW26VuoKqwUD8UqLn6gdWYyv3OVxyzSGBEGz6",
+        __v: 0,
+        accuracy: 100,
+        wpm: 10,
+        completion: 3,
+        userTypedErrors: 0,
+        userTypedLength: 10,
+      },
+    };
   },
 };
 </script>

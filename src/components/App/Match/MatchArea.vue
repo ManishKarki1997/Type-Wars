@@ -1,15 +1,20 @@
 <template>
   <div class="h-full bg-white rounded shadow-lg">
-    <div class="bg-gray-100 rounded px-4 py-4 flex items-center hover:shadow-md">
-      <div class="w-1/6">
+    <div
+      class="bg-gray-100 rounded px-4 py-4 flex items-center hover:shadow-md"
+    >
+      <div class="h-16 mr-6">
         <vs-tooltip circle top>
           <vs-avatar circle size="50" badge badge-color="success">
-            <img :src="opponentDetails.avatar" :alt="opponentDetails.name + ' avatar image'" />
+            <img
+              :src="opponentDetails.avatar"
+              :alt="opponentDetails.name + ' avatar image'"
+            />
           </vs-avatar>
           <template #tooltip> {{ opponentDetails.name }} </template>
         </vs-tooltip>
       </div>
-      <div class="5/6">
+      <div class="h-32 overflow-y-auto">
         <vs-tooltip circle top>
           <p class="opponent-typed-text-p"></p>
           <template #tooltip> Opponent's progress </template>
@@ -17,7 +22,7 @@
       </div>
     </div>
 
-    <div class="px-4 py-4 mt-4">
+    <div class="user-typed-data h-64 px-4 py-4 mt-4 overflow-y-auto">
       <span
         v-for="(letter, index) in textToType"
         :key="'letter-' + index"
@@ -26,21 +31,21 @@
       >
     </div>
 
-    <div class="w-full px-4 py-4 rounded mt-4">
-      <textarea
-        onselectstart="return false"
+    <!-- onselectstart="return false"
         onpaste="return false;"
         onCopy="return false"
         onCut="return false"
         onDrag="return false"
         onDrop="return false"
-        autocomplete="off"
+        autocomplete="off" -->
+    <div class="w-full px-4 py-4 rounded mt-4">
+      <textarea
         autofocus
         class="bg-gray-200 w-full px-4 py-4 rounded shadow border border-1 border-gray-600 disabled:bg-gray-300"
         name="typing-textbox"
         id="typing-textbox"
         cols="30"
-        rows="10"
+        rows="4"
         v-model="userTypedText"
         :disabled="userFinishedTyping"
       ></textarea>
@@ -58,7 +63,7 @@ export default {
   },
   computed: {
     ...mapState("user", ["user", "userGameDetails", "socketId"]),
-    ...mapState("game", ["activeGameDetails"]),
+    ...mapState("game", ["activeGameDetails", "cleanTextToType"]),
     opponentDetails() {
       return this.activeGameDetails[
         Object.keys(this.activeGameDetails).find(
@@ -85,20 +90,17 @@ export default {
         if (this.userTypedText.length > 0) {
           this.$store.commit("user/SET_USER_GAME_DETAILS", {
             ...this.userGameDetails,
-            wpm: Math.floor(this.accurateLettersTyped / 5 / (this.gameCountdown / 60)),
+            wpm: Math.floor(
+              this.accurateLettersTyped / 5 / (this.gameCountdown / 60)
+            ),
           });
         }
         this.startGameCountdown();
       }, 1000);
     },
   },
-  created() {
-    const textToType = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi accusamus recusandae quas est
-        assumenda illum sapiente atque culpa soluta vero error a cum, corrupti repudiandae ut amet
-        doloremque eveniet itaque, laudantium aliquam quibusdam? Similique aut deleniti magnam ipsam
-        quibusdam dolorum?`;
-
-    this.textToType = textToType.split("");
+  mounted() {
+    this.textToType = this.cleanTextToType.split("");
     this.startGameCountdown();
   },
 
@@ -202,9 +204,16 @@ export default {
           .split("")
           .filter((l, i) => l === newTypedLetter[i]).length;
 
-        const accuracy = Math.floor((accurateLettersTyped / this.userTypedText.length) * 100) || 0;
-        const completion = Math.floor((this.userTypedText.length / this.textToType.length) * 100);
-        const wpm = Math.floor(accurateLettersTyped / 5 / (this.gameCountdown / 60));
+        const accuracy =
+          Math.floor(
+            (accurateLettersTyped / this.userTypedText.length) * 100
+          ) || 0;
+        const completion = Math.floor(
+          (this.userTypedText.length / this.textToType.length) * 100
+        );
+        const wpm = Math.floor(
+          accurateLettersTyped / 5 / (this.gameCountdown / 60)
+        );
 
         this.accurateLettersTyped = accurateLettersTyped;
 
@@ -226,8 +235,8 @@ export default {
           },
         });
 
-        // if (this.userTypedText.length === this.textToType.length) {
-        if (this.userTypedText.length == 10) {
+        if (this.userTypedText.length >= this.textToType.length) {
+          // if (this.userTypedText.length == 30) {
           this.userFinishedTyping = true;
           const payload = {
             socketId: this.socketId,
@@ -236,9 +245,19 @@ export default {
             wpm,
             completion,
           };
+
+          // count the number of incorrectly typed letters
+          const userTypedErrors = document
+            .querySelector(".user-typed-data")
+            .querySelectorAll(".bg-red-200").length;
+
           this.$socket.emit("TYPING_FINISHED", {
             roomId: this.activeGameDetails.roomId,
-            user: payload,
+            user: {
+              ...payload,
+              userTypedErrors,
+              userTypedLength: this.userTypedText.length,
+            },
           });
         }
       },
@@ -251,9 +270,19 @@ export default {
         if (!oldTypedText && !newTypedText) return;
 
         // user pressed backspace(i.e. deleted a word)
-        if (oldTypedText && newTypedText && oldTypedText.length > newTypedText.length) {
-          document.querySelector(`.opponent-text-${this.opponentTypedLetters.length - 2}`).remove();
-          this.opponentTypedLetters.splice(this.opponentTypedLetters.length - 1);
+        if (
+          oldTypedText &&
+          newTypedText &&
+          oldTypedText.length > newTypedText.length
+        ) {
+          document
+            .querySelector(
+              `.opponent-text-${this.opponentTypedLetters.length - 2}`
+            )
+            .remove();
+          this.opponentTypedLetters.splice(
+            this.opponentTypedLetters.length - 1
+          );
         } else if (oldTypedText && !newTypedText) {
           // user selected all text and deleted them
           // so remove the text from the UI altogether
@@ -264,18 +293,28 @@ export default {
           // and add relevant background color
           const newTypedLetter = newTypedText[newTypedText.length - 1];
 
-          if (newTypedLetter === this.textToType[this.opponentTypedLetters.length]) {
+          if (
+            newTypedLetter === this.textToType[this.opponentTypedLetters.length]
+          ) {
             const spanElement = document.createElement("span");
             spanElement.classList.add("bg-green-200");
-            spanElement.classList.add(`opponent-text-${this.opponentTypedLetters.length - 1}`);
+            spanElement.classList.add(
+              `opponent-text-${this.opponentTypedLetters.length - 1}`
+            );
             spanElement.textContent = newTypedLetter;
-            document.querySelector(".opponent-typed-text-p").append(spanElement);
+            document
+              .querySelector(".opponent-typed-text-p")
+              .append(spanElement);
           } else {
             const spanElement = document.createElement("span");
             spanElement.classList.add("bg-red-200");
-            spanElement.classList.add(`opponent-text-${this.opponentTypedLetters.length - 1}`);
+            spanElement.classList.add(
+              `opponent-text-${this.opponentTypedLetters.length - 1}`
+            );
             spanElement.textContent = newTypedLetter;
-            document.querySelector(".opponent-typed-text-p").append(spanElement);
+            document
+              .querySelector(".opponent-typed-text-p")
+              .append(spanElement);
           }
           this.opponentTypedLetters.push(newTypedLetter);
         }

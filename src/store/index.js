@@ -15,7 +15,9 @@ const vuexLocal = new VuexPersistence({
 export default new Vuex.Store({
   state: {
   },
-  mutations: {},
+  mutations: {
+
+  },
   actions: {},
   modules: {
     user: UserModule,

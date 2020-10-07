@@ -5,15 +5,39 @@
         <h4>Login to your account</h4>
       </div>
       <form @submit.prevent="handleUserLogin">
-        <vs-input type="text" label="Username" v-model="user.username"> </vs-input>
+        <vs-input
+          primary
+          border
+          state="primary"
+          type="text"
+          label="Username"
+          v-model="user.username"
+        >
+        </vs-input>
 
-        <vs-input type="password" label="Password" v-model="user.password"> </vs-input>
+        <vs-input
+          primary
+          state="primary"
+          type="password"
+          label="Password"
+          v-model="user.password"
+        >
+        </vs-input>
         <div>
-          <vs-button :loading="isCallingAPI" size="large" active button="submit"> Login </vs-button>
+          <vs-button
+            :loading="isCallingAPI"
+            size="large"
+            active
+            button="submit"
+          >
+            Login
+          </vs-button>
 
           <div class="form-footer-wrapper">
             <h4>Don't have an account?</h4>
-            <vs-button to="/signup" size="large" transparent circle> Signup </vs-button>
+            <vs-button to="/signup" size="large" transparent circle>
+              Signup
+            </vs-button>
           </div>
         </div>
       </form>
@@ -100,7 +124,8 @@ section {
       background-color: white;
       padding: 2rem;
       border-radius: 5px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
       &:hover {
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       }

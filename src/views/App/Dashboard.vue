@@ -28,7 +28,7 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
     this.$store.commit("game/SET_MATCH_RESULTS_MODAL", {
       show: false,
       opponentLeft: false,

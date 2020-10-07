@@ -3,11 +3,20 @@
     <vs-dialog width="700px" not-center blur v-model="matchResultsModal.show">
       <template #header>
         <h4 class="not-margin text-center font-bold text-2xl">
-          {{ matchResults.winner.email === user.email ? "You Won!" : "You Lost." }}
+          {{
+            !matchResults.winner
+              ? "DRAW"
+              : matchResults.winner.email === user.email
+              ? "You Won!"
+              : "You Lost."
+          }}
         </h4>
       </template>
 
-      <div class="con-content" v-if="matchResults.userDetails && matchResults.opponentDetails">
+      <div
+        class="con-content"
+        v-if="matchResults.userDetails && matchResults.opponentDetails"
+      >
         <div class="flex items-center justify-between px-4">
           <div class="rounded flex w-5/12 py-2">
             <img
@@ -16,13 +25,16 @@
               :alt="matchResults.userDetails.name + 'avatar'"
             />
             <div class="ml-2">
-              <h4 class="font-bold text-xl">{{ matchResults.userDetails.name }}</h4>
+              <h4 class="font-bold text-xl">
+                {{ matchResults.userDetails.name }}
+              </h4>
 
               <h4
                 class="font-bold mr-2"
                 :class="
                   !matchResultsModal.opponentLeft &&
-                  (matchResults.userDetails.accuracy > matchResults.opponentDetails.accuracy
+                  (matchResults.userDetails.accuracy >
+                  matchResults.opponentDetails.accuracy
                     ? 'text-green-500'
                     : 'text-red-500')
                 "
@@ -33,7 +45,8 @@
                 class="font-bold mr-2"
                 :class="
                   !matchResultsModal.opponentLeft &&
-                  (matchResults.userDetails.wpm > matchResults.opponentDetails.wpm
+                  (matchResults.userDetails.wpm >
+                  matchResults.opponentDetails.wpm
                     ? 'text-green-500'
                     : 'text-red-500')
                 "
@@ -44,7 +57,8 @@
                 class="font-bold mr-2"
                 :class="
                   !matchResultsModal.opponentLeft &&
-                  (matchResults.userDetails.completion > matchResults.opponentDetails.completion
+                  (matchResults.userDetails.completion >
+                  matchResults.opponentDetails.completion
                     ? 'text-green-500'
                     : 'text-red-500')
                 "
@@ -62,12 +76,15 @@
 
           <div class="py-2 rounded flex justify-end text-right w-5/12">
             <div class="mr-2">
-              <h4 class="font-bold text-xl">{{ matchResults.opponentDetails.name }}</h4>
+              <h4 class="font-bold text-xl">
+                {{ matchResults.opponentDetails.name }}
+              </h4>
               <h4
                 class="font-bold mr-2"
                 :class="
                   !matchResultsModal.opponentLeft &&
-                  (matchResults.userDetails.accuracy < matchResults.opponentDetails.accuracy
+                  (matchResults.userDetails.accuracy <
+                  matchResults.opponentDetails.accuracy
                     ? 'text-green-500'
                     : 'text-red-500')
                 "
@@ -82,18 +99,24 @@
                 class="font-bold mr-2"
                 :class="
                   !matchResultsModal.opponentLeft &&
-                  (matchResults.userDetails.wpm < matchResults.opponentDetails.wpm
+                  (matchResults.userDetails.wpm <
+                  matchResults.opponentDetails.wpm
                     ? 'text-green-500'
                     : 'text-red-500')
                 "
               >
-                {{ matchResultsModal.opponentLeft ? "Left" : matchResults.opponentDetails.wpm }}
+                {{
+                  matchResultsModal.opponentLeft
+                    ? "Left"
+                    : matchResults.opponentDetails.wpm
+                }}
               </h4>
               <h4
                 class="font-bold mr-2"
                 :class="
                   !matchResultsModal.opponentLeft &&
-                  (matchResults.userDetails.completion > matchResults.opponentDetails.completion
+                  (matchResults.userDetails.completion >
+                  matchResults.opponentDetails.completion
                     ? 'text-green-500'
                     : 'text-red-500')
                 "
@@ -116,8 +139,12 @@
 
       <template #footer>
         <div class="con-footer">
-          <vs-button @click="handleRematch" :active="active == 1"> Rematch </vs-button>
-          <vs-button @click="closeShowMatchResultsModal" dark transparent> Ok </vs-button>
+          <vs-button @click="handleRematch" :active="active == 1">
+            Rematch
+          </vs-button>
+          <vs-button @click="closeShowMatchResultsModal" dark transparent>
+            Ok
+          </vs-button>
         </div>
       </template>
     </vs-dialog>
@@ -130,7 +157,11 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState("user", ["user", "userGameDetails"]),
-    ...mapState("game", ["activeGameDetails", "matchResultsModal", "matchResults"]),
+    ...mapState("game", [
+      "activeGameDetails",
+      "matchResultsModal",
+      "matchResults",
+    ]),
     opponentDetails() {
       return this.activeGameDetails[
         Object.keys(this.activeGameDetails).find(
