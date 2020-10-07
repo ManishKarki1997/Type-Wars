@@ -9,50 +9,22 @@
         </vs-tooltip>
       </div>
       <form @submit.prevent="handleUsersignup">
-        <vs-input
-          border
-          state="primary"
-          type="text"
-          label="Name"
-          v-model="user.name"
-        >
+        <vs-input type="text" label="Name" v-model="user.name"> </vs-input>
+
+        <vs-input type="text" label="Username" v-model="user.username">
         </vs-input>
 
-        <vs-input
-          border
-          state="primary"
-          type="text"
-          label="Username"
-          v-model="user.username"
-        >
-        </vs-input>
+        <vs-input type="email" label="Email" v-model="user.email"> </vs-input>
 
-        <vs-input
-          border
-          state="primary"
-          type="email"
-          label="Email"
-          v-model="user.email"
-        >
-        </vs-input>
-
-        <div class="columns">
-          <vs-input
-            state="primary"
-            type="password"
-            label="Password"
-            v-model="user.password"
-          >
+        <vs-row class="columns password-row">
+          <vs-input type="password" label="Password" v-model="user.password">
           </vs-input>
-
           <vs-input
-            border
-            state="primary"
             type="password"
             label="Retype Password"
             v-model="user.retypePassword"
           ></vs-input>
-        </div>
+        </vs-row>
 
         <div>
           <vs-button
@@ -155,7 +127,8 @@ section {
       }
 
       .vs-input-parent {
-        margin: 2rem 0 !important;
+        margin: 2rem 0;
+        // margin: 1.5rem 0 3rem 0;
 
         label {
           font-size: 16px;
@@ -163,13 +136,18 @@ section {
 
         .vs-input-content {
           .vs-input {
-            margin-top: 4px;
-            padding: 10px;
-            min-width: 100%;
+            // padding: 10px;
+            width: 100%;
             font-size: 16px;
             border-radius: 5px;
+            border: 1px solid rgb(163, 161, 161);
+            margin-bottom: 8px;
+            margin-left: 1rem !important;
           }
         }
+      }
+      .password-row {
+        margin-top: -2rem !important;
       }
       .form-footer-wrapper {
         display: flex;

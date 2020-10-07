@@ -5,23 +5,10 @@
         <h4>Login to your account</h4>
       </div>
       <form @submit.prevent="handleUserLogin">
-        <vs-input
-          primary
-          border
-          state="primary"
-          type="text"
-          label="Username"
-          v-model="user.username"
-        >
+        <vs-input type="text" label="Username" v-model="user.username">
         </vs-input>
 
-        <vs-input
-          primary
-          state="primary"
-          type="password"
-          label="Password"
-          v-model="user.password"
-        >
+        <vs-input type="password" label="Password" v-model="user.password">
         </vs-input>
         <div>
           <vs-button
@@ -138,11 +125,12 @@ section {
 
         .vs-input-content {
           .vs-input {
-            margin-top: 4px;
-            padding: 10px;
+            // padding: 10px;
             min-width: 100%;
             font-size: 16px;
             border-radius: 5px;
+            border: 1px solid rgb(163, 161, 161);
+            margin-bottom: 8px;
           }
         }
       }
