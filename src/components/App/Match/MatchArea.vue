@@ -235,8 +235,8 @@ export default {
           },
         });
 
-        // if (this.userTypedText.length >= this.textToType.length) {
-        if (this.userTypedText.length == 80) {
+        if (this.userTypedText.length >= this.textToType.length) {
+          // if (this.userTypedText.length == 80) {
           this.userFinishedTyping = true;
           const payload = {
             socketId: this.socketId,

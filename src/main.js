@@ -50,7 +50,7 @@ Vue.use(Vuesax, {});
 Vue.use(
   new VueSocketIO({
     debug: false,
-    connection: "http://localhost:4000",
+    connection: "https://typewars.herokuapp.com",
   })
 );
 
