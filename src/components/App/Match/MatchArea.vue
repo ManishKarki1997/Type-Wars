@@ -31,16 +31,16 @@
       >
     </div>
 
-    <!-- onselectstart="return false"
+    <div class="w-full px-4 py-4 rounded mt-4">
+      <textarea
+        autofocus
+        onselectstart="return false"
         onpaste="return false;"
         onCopy="return false"
         onCut="return false"
         onDrag="return false"
         onDrop="return false"
-        autocomplete="off" -->
-    <div class="w-full px-4 py-4 rounded mt-4">
-      <textarea
-        autofocus
+        autocomplete="off"
         class="bg-gray-200 w-full px-4 py-4 rounded shadow border border-1 border-gray-600 disabled:bg-gray-300"
         name="typing-textbox"
         id="typing-textbox"
@@ -235,8 +235,8 @@ export default {
           },
         });
 
-        if (this.userTypedText.length >= this.textToType.length) {
-          // if (this.userTypedText.length == 30) {
+        // if (this.userTypedText.length >= this.textToType.length) {
+        if (this.userTypedText.length == 80) {
           this.userFinishedTyping = true;
           const payload = {
             socketId: this.socketId,

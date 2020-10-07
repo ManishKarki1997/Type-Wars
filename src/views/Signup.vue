@@ -1,20 +1,53 @@
 <template>
   <section>
     <div class="signup-form-wrapper">
-      <div class="mb-4 form-header-wrapper">
+      <div class="mb-1 form-header-wrapper flex justify-between items-center">
         <h4>Signup for an account</h4>
+        <vs-tooltip circle top class="icon-wrapper ml-2">
+          <InfoIcon />
+          <template #tooltip> You can use dummy data </template>
+        </vs-tooltip>
       </div>
       <form @submit.prevent="handleUsersignup">
-        <vs-input type="text" label="Name" v-model="user.name"> </vs-input>
+        <vs-input
+          border
+          state="primary"
+          type="text"
+          label="Name"
+          v-model="user.name"
+        >
+        </vs-input>
 
-        <vs-input type="text" label="Username" v-model="user.username"> </vs-input>
+        <vs-input
+          border
+          state="primary"
+          type="text"
+          label="Username"
+          v-model="user.username"
+        >
+        </vs-input>
 
-        <vs-input type="email" label="Email" v-model="user.email"> </vs-input>
+        <vs-input
+          border
+          state="primary"
+          type="email"
+          label="Email"
+          v-model="user.email"
+        >
+        </vs-input>
 
         <div class="columns">
-          <vs-input type="password" label="Password" v-model="user.password"> </vs-input>
+          <vs-input
+            state="primary"
+            type="password"
+            label="Password"
+            v-model="user.password"
+          >
+          </vs-input>
 
           <vs-input
+            border
+            state="primary"
             type="password"
             label="Retype Password"
             v-model="user.retypePassword"
@@ -44,8 +77,12 @@
 
 <script>
 import axios from "axios";
+import InfoIcon from "@/assets/icons/info.svg";
 
 export default {
+  components: {
+    InfoIcon,
+  },
   data() {
     return {
       activeButton: 0,
@@ -63,20 +100,20 @@ export default {
     async handleUsersignup() {
       this.isCallingAPI = true;
       try {
-        const res = await this.$axios.post(`${process.env.VUE_APP_API_URL}/api/auth`, this.user);
+        const res = await this.$axios.post(
+          `${process.env.VUE_APP_API_URL}/api/auth`,
+          this.user
+        );
         if (!res.data.error) {
-          
-this.$toast.success(
-   res.data.message)
-      
+          this.$toast.success(res.data.message);
+
           setTimeout(() => {
             this.$router.push("/login");
           }, 2000);
         }
       } catch (error) {
-          this.$toast.error( error.response.data.message
-)
-       
+        this.$toast.error(error.response.data.message);
+
         // });
       } finally {
         this.isCallingAPI = false;
@@ -94,7 +131,7 @@ section {
   justify-content: center;
 
   .signup-form-wrapper {
-    width: 30%;
+    width: 35%;
     margin: 0 auto;
 
     .form-header-wrapper {
@@ -111,7 +148,8 @@ section {
       padding: 2rem;
       border-radius: 5px;
 
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
       &:hover {
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       }

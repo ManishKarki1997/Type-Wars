@@ -24,13 +24,10 @@
             />
 
             <div class="player-details-wrapper">
-              <img
-                src="https://w.wallhaven.cc/full/2e/wallhaven-2ero7g.jpg"
-                alt=""
-              />
+              <img :src="user.avatar" alt="" />
               <div class="player-info">
-                <h4>Manish Karki</h4>
-                <p>50 WPM</p>
+                <h4>{{ user.name }}</h4>
+                <p>{{ user.username }}</p>
               </div>
             </div>
           </div>
@@ -42,13 +39,10 @@
             />
 
             <div class="player-details-wrapper">
-              <img
-                src="https://w.wallhaven.cc/full/g8/wallhaven-g8o86d.jpg"
-                alt=""
-              />
+              <img :src="opponentDetails.avatar" alt="" />
               <div class="player-info">
-                <h4>Skye</h4>
-                <p>90 WPM</p>
+                <h4>{{ opponentDetails.name }}</h4>
+                <p>{{ opponentDetails.username }}</p>
               </div>
             </div>
           </div>
@@ -87,6 +81,14 @@ export default {
   },
   computed: {
     ...mapState("game", ["activeGameDetails"]),
+    ...mapState("user", ["user", "userGameDetails", "socketId"]),
+    opponentDetails() {
+      return this.activeGameDetails[
+        Object.keys(this.activeGameDetails).find(
+          (key) => this.activeGameDetails[key].email !== this.user.email
+        )
+      ];
+    },
   },
   sockets: {
     GAME_START_COUNTDOWN({ countdownTimer, textToType }) {
@@ -144,6 +146,7 @@ export default {
     this.roomId = this.$route.query.roomId;
     this.$socket.emit("JOIN_ROOM", this.roomId);
     this.$socket.emit("PLAYER_READY", this.roomId);
+    console.log(this.activeGameDetails);
   },
 };
 </script>

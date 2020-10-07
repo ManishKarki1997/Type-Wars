@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="px-12">
     <OnlinePlayers />
   </div>
 </template>

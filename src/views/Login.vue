@@ -108,7 +108,7 @@ section {
   justify-content: center;
 
   .login-form-wrapper {
-    width: 25%;
+    width: 30%;
     margin: 0 auto;
 
     .form-header-wrapper {

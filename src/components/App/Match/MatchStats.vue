@@ -2,7 +2,11 @@
   <div class="w-full flex flex-col">
     <div class="w-full bg-white rounded shadow flex hover:shadow-md">
       <div class="w-3/12 h-24">
-        <img :src="opponentDetails.avatar" alt="" class="w-full h-full rounded-sm object-cover" />
+        <img
+          :src="opponentDetails.avatar"
+          alt=""
+          class="w-full h-full rounded-sm object-cover"
+        />
       </div>
       <div class="w-9/12 px-4 py-2 flex justify-between">
         <div>
@@ -11,12 +15,12 @@
             @<span>{{ opponentDetails.username }}</span>
           </p>
         </div>
-        <div>
+        <!-- <div>
           <vs-tooltip circle top class="flex items-center w-6 mt-2 cursor-pointer">
             <SmileIcon class="w-6 h-6" />
             <template #tooltip> Taunt {{ opponentDetails.username }} with a gif </template>
           </vs-tooltip>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -41,7 +45,9 @@
       </div>
 
       <div class="flex align-center justify-evenly">
-        <h2 class="font-bold lg:text-3xl md:text-2xl sm:text-xl">{{ userGameDetails.wpm }}</h2>
+        <h2 class="font-bold lg:text-3xl md:text-2xl sm:text-xl">
+          {{ userGameDetails.wpm }}
+        </h2>
 
         <h2 class="font-bold lg:text-4xl md:text-2xl sm:text-xl text-4xl">
           {{ userGameDetails.completion }}%
@@ -55,7 +61,11 @@
 
     <div class="w-full bg-white rounded shadow flex hover:shadow-md">
       <div class="w-3/12 h-24">
-        <img :src="user.avatar" alt="" class="w-full h-full rounded-sm object-cover" />
+        <img
+          :src="user.avatar"
+          alt=""
+          class="w-full h-full rounded-sm object-cover"
+        />
       </div>
       <div class="w-9/12 px-4 py-2 flex justify-between">
         <div>

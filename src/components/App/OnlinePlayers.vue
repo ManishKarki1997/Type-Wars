@@ -31,10 +31,10 @@
                 <GamepadIcon @click="handleChallengeUserClick(onlineUser)" />
                 <template #tooltip> Challenge for a game </template>
               </vs-tooltip>
-              <vs-tooltip circle top class="icon-wrapper">
+              <!-- <vs-tooltip circle top class="icon-wrapper">
                 <SupportIcon />
                 <template #tooltip> Send a friend request </template>
-              </vs-tooltip>
+              </vs-tooltip> -->
             </div>
           </li>
         </transition-group>
@@ -231,13 +231,13 @@ export default {
 .online-players-cards-wrapper {
   .vs-card__title {
     position: sticky;
-    top: 0;
+    top: 2rem;
     left: 0;
     z-index: 20;
     background-color: white;
   }
   .online-users {
-    margin-top: 1rem;
+    margin-top: 3rem;
     .online-user {
       display: flex;
       align-items: center;
