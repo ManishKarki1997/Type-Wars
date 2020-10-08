@@ -14,7 +14,7 @@
           <template #tooltip> {{ opponentDetails.name }} </template>
         </vs-tooltip>
       </div>
-      <div class="h-32 overflow-y-auto">
+      <div class="w-full h-32 overflow-y-auto">
         <vs-tooltip circle top>
           <p class="opponent-typed-text-p"></p>
           <template #tooltip> Opponent's progress </template>
@@ -23,7 +23,7 @@
       <p>{{ 60 - gameCountdown }}</p>
     </div>
 
-    <div class="w-full user-typed-data h-64 px-4 py-4 mt-4 overflow-y-auto">
+    <div class="user-typed-data h-64 px-4 py-4 mt-4 overflow-y-auto">
       <span
         v-for="(letter, index) in textToType"
         :key="'letter-' + index"
