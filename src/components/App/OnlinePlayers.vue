@@ -62,7 +62,12 @@
             <!-- <p>some other user statistics</p> -->
           </div>
         </div>
-        <!-- <vs-input type="text" label="Challenge Message" v-model="challengeMessage"> </vs-input> -->
+        <vs-input
+          type="text"
+          label="Challenge Message"
+          v-model="challengeMessage"
+        >
+        </vs-input>
       </div>
 
       <template #footer>
@@ -184,42 +189,7 @@ export default {
     },
   },
 
-  mounted() {
-    const data = {
-      "manishkarki247@gmail.com": {
-        socketId: "U5KsllWWDYQ6k6rmAAAE",
-        avatar: "https://w.wallhaven.cc/full/ox/wallhaven-oxo7e9.png",
-        _id: "5f7b3e808c656a22f0527abb",
-        name: "Manish Karki",
-        email: "manishkarki247@gmail.com",
-        username: "StarScream97",
-        password:
-          "$2a$12$MEh1/.E9aRDTqg2kFLR8IOE1cC4OH2eLQxqX3g1ZM6Wca3Jys.Guy",
-        __v: 0,
-        accuracy: 10,
-        wpm: 2,
-        completion: 3,
-        userTypedErrors: 9,
-        userTypedLength: 10,
-      },
-      "skye247@gmail.com": {
-        socketId: "w5zVD9yJwl9WH-3qAAAD",
-        avatar: "https://w.wallhaven.cc/full/ox/wallhaven-oxo7e9.png",
-        _id: "5f7b42edc185f529b089afd3",
-        name: "Skye",
-        email: "skye247@gmail.com",
-        username: "skye247",
-        password:
-          "$2a$12$.IDoddRKeAxQD.pkoW26VuoKqwUD8UqLn6gdWYyv3OVxyzSGBEGz6",
-        __v: 0,
-        accuracy: 100,
-        wpm: 10,
-        completion: 3,
-        userTypedErrors: 0,
-        userTypedLength: 10,
-      },
-    };
-  },
+  mounted() {},
 };
 </script>
 
@@ -319,6 +289,8 @@ export default {
 
   input {
     width: 100%;
+    border: 1px solid rgb(163, 161, 161) !important;
+    border-radius: 3px !important;
   }
 }
 </style>

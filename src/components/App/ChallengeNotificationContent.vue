@@ -5,14 +5,15 @@
         <img :src="challengeData.challenger.avatar" alt="User Avatar" />
       </vs-avatar>
     </div>
-    <div class="w-5/6">
+    <div class="w-5/6 ml-2">
       <h5 v-if="!isARematch">
-        <strong>{{ challengeData.challenger.name }}</strong> challenged you to a game.
+        <strong>{{ challengeData.challenger.name }}</strong> challenged you.
       </h5>
       <h5 v-if="isARematch">
-        <strong>{{ challengeData.challenger.name }}</strong> asked for a rematch.
+        <strong>{{ challengeData.challenger.name }}</strong> asked for a
+        rematch.
       </h5>
-      <!-- <p class="italic">{{ challengeData.message }}</p> -->
+      <p class="italic">{{ challengeData.message }}</p>
       <div class="mt-2 flex items-center">
         <button
           class="px-6 py-1 bg-gray-200 text-black rounded-sm mr-4"

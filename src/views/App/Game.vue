@@ -146,7 +146,6 @@ export default {
     this.roomId = this.$route.query.roomId;
     this.$socket.emit("JOIN_ROOM", this.roomId);
     this.$socket.emit("PLAYER_READY", this.roomId);
-    console.log(this.activeGameDetails);
   },
 };
 </script>

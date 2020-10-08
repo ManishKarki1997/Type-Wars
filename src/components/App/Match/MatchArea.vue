@@ -1,7 +1,7 @@
 <template>
   <div class="h-full bg-white rounded shadow-lg">
     <div
-      class="bg-gray-100 rounded px-4 py-4 flex items-center hover:shadow-md"
+      class="bg-gray-100 rounded px-4 py-4 flex justify-between hover:shadow-md"
     >
       <div class="h-16 mr-6">
         <vs-tooltip circle top>
@@ -20,6 +20,7 @@
           <template #tooltip> Opponent's progress </template>
         </vs-tooltip>
       </div>
+      <p>{{ 60 - gameCountdown }}</p>
     </div>
 
     <div class="user-typed-data h-64 px-4 py-4 mt-4 overflow-y-auto">
@@ -81,11 +82,37 @@ export default {
       opponentTypedText: "",
       opponentTypedLetters: [],
       userFinishedTyping: false,
+      isGameEndEventAlreadySent: false,
     };
   },
   methods: {
+    emitDataAfterGameEnd() {
+      this.userFinishedTyping = true;
+      this.isGameEndEventAlreadySent = true;
+      const payload = {
+        socketId: this.socketId,
+        ...this.user,
+        accuracy: this.userGameDetails.accuracy,
+        wpm: this.userGameDetails.wpm,
+        completion: this.userGameDetails.completion,
+      };
+
+      // count the number of incorrectly typed letters
+      const userTypedErrors = document
+        .querySelector(".user-typed-data")
+        .querySelectorAll(".bg-red-200").length;
+
+      this.$socket.emit("TYPING_FINISHED", {
+        roomId: this.activeGameDetails.roomId,
+        user: {
+          ...payload,
+          userTypedErrors,
+          userTypedLength: this.userTypedText.length,
+        },
+      });
+    },
     startGameCountdown() {
-      setTimeout(() => {
+      const timeOut = setTimeout(() => {
         this.gameCountdown += 1;
         if (this.userTypedText.length > 0) {
           this.$store.commit("user/SET_USER_GAME_DETAILS", {
@@ -94,6 +121,12 @@ export default {
               this.accurateLettersTyped / 5 / (this.gameCountdown / 60)
             ),
           });
+        }
+
+        if (this.gameCountdown >= 60) {
+          this.emitDataAfterGameEnd();
+          clearTimeout(timeOut);
+          return;
         }
         this.startGameCountdown();
       }, 1000);
@@ -236,29 +269,32 @@ export default {
         });
 
         if (this.userTypedText.length >= this.textToType.length) {
+          if (!this.isGameEndEventAlreadySent) {
+            this.emitDataAfterGameEnd();
+          }
           // if (this.userTypedText.length == 80) {
-          this.userFinishedTyping = true;
-          const payload = {
-            socketId: this.socketId,
-            ...this.user,
-            accuracy,
-            wpm,
-            completion,
-          };
+          //   this.userFinishedTyping = true;
+          //   const payload = {
+          //     socketId: this.socketId,
+          //     ...this.user,
+          //     accuracy,
+          //     wpm,
+          //     completion,
+          //   };
 
-          // count the number of incorrectly typed letters
-          const userTypedErrors = document
-            .querySelector(".user-typed-data")
-            .querySelectorAll(".bg-red-200").length;
+          //   // count the number of incorrectly typed letters
+          //   const userTypedErrors = document
+          //     .querySelector(".user-typed-data")
+          //     .querySelectorAll(".bg-red-200").length;
 
-          this.$socket.emit("TYPING_FINISHED", {
-            roomId: this.activeGameDetails.roomId,
-            user: {
-              ...payload,
-              userTypedErrors,
-              userTypedLength: this.userTypedText.length,
-            },
-          });
+          //   this.$socket.emit("TYPING_FINISHED", {
+          //     roomId: this.activeGameDetails.roomId,
+          //     user: {
+          //       ...payload,
+          //       userTypedErrors,
+          //       userTypedLength: this.userTypedText.length,
+          //     },
+          //   });
         }
       },
     },
