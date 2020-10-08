@@ -23,7 +23,7 @@
       <p>{{ 60 - gameCountdown }}</p>
     </div>
 
-    <div class="user-typed-data h-64 px-4 py-4 mt-4 overflow-y-auto">
+    <div class="w-full user-typed-data h-64 px-4 py-4 mt-4 overflow-y-auto">
       <span
         v-for="(letter, index) in textToType"
         :key="'letter-' + index"
