@@ -39,12 +39,6 @@ axios.interceptors.request.use(
   }
 );
 
-// Vue.use(VueToast, {
-//   position: "top-right",
-//   duration: 2000,
-//   type: "info",
-// });
-
 Vue.use(Vuesax, {});
 
 Vue.use(

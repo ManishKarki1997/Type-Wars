@@ -80,7 +80,6 @@ export default {
           }, 2000);
         }
       } catch (error) {
-        console.log(error);
         if (!error?.response) {
           this.$toast.error("Something went wrong");
           return;

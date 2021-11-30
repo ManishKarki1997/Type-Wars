@@ -1,12 +1,6 @@
 <template>
   <div class="center examplex">
-    <vs-navbar
-      not-line
-      shadow
-      target-scroll="#hide-scroll-content"
-      rightCollapsed
-      v-model="active"
-    >
+    <vs-navbar not-line shadow target-scroll="#hide-scroll-content" rightCollapsed v-model="active">
       <template #left>
         <router-link :to="isLoggedIn ? '/app/dashboard' : '/'">
           <h2>Type<span>Wars</span></h2>
@@ -44,28 +38,17 @@
         <vs-button v-if="!isLoggedIn">
           <router-link to="/signup"> Sign Up </router-link>
         </vs-button>
-        <vs-button
-          @click="handleLogoutButtonClick"
-          v-if="isLoggedIn"
-          circle
-          transparent
-        >
+        <vs-button @click="handleLogoutButtonClick" v-if="isLoggedIn" circle transparent>
           Logout
         </vs-button>
 
-        <vs-avatar v-if="isLoggedIn" circle size="35">
+        <vs-avatar @click="$router.push('/app/dashboard')" v-if="isLoggedIn" circle size="35">
           <img :src="user.avatar" alt="User Avatar" />
         </vs-avatar>
       </template>
     </vs-navbar>
 
-    <vs-dialog
-      class="navbar-dialog"
-      width="550px"
-      blur
-      not-center
-      v-model="showConfirmLogoutModal"
-    >
+    <vs-dialog class="navbar-dialog" width="550px" blur not-center v-model="showConfirmLogoutModal">
       <template #header>
         <h4 class="not-margin">Are you sure you want to logout?</h4>
       </template>
@@ -73,9 +56,7 @@
       <template #footer>
         <div class="con-footer">
           <vs-button @click="logout" active> Yes </vs-button>
-          <vs-button @click="showConfirmLogoutModal = false" dark transparent>
-            Cancel
-          </vs-button>
+          <vs-button @click="showConfirmLogoutModal = false" dark transparent> Cancel </vs-button>
         </div>
       </template>
     </vs-dialog>

@@ -45,7 +45,7 @@ export default {
           `${process.env.VUE_APP_API_URL}/api/auth/login`,
           this.user
         );
-        console.log(res);
+
         if (!res.data.error) {
           // this.$vs.notification({
           //   title: res.data.message,
