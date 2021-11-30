@@ -1,9 +1,6 @@
 <template>
-  <div class="game-page-wrapper lg:px-16 md:px-4 bg-gray-200 overflow-hidden">
-    <div
-      class="flex justify-between py-8"
-      v-if="!showIntroScreen && gameHasStarted"
-    >
+  <div class="overflow-hidden bg-gray-200 game-page-wrapper lg:px-16 md:px-4">
+    <div class="flex justify-between py-8" v-if="!showIntroScreen && gameHasStarted">
       <div class="w-9/12">
         <MatchArea />
       </div>
@@ -18,10 +15,7 @@
       <div class="intro-screen-wrapper">
         <div class="splash-wrapper">
           <div class="player-splash player-splash--left">
-            <img
-              src="https://w.wallhaven.cc/full/2e/wallhaven-2ero7g.jpg"
-              alt=""
-            />
+            <img src="https://images.alphacoders.com/941/thumb-1920-941899.png" alt="" />
 
             <div class="player-details-wrapper">
               <img :src="user.avatar" alt="" />
@@ -33,12 +27,9 @@
           </div>
 
           <div class="player-splash player-splash--right">
-            <img
-              src="https://w.wallhaven.cc/full/g8/wallhaven-g8o86d.jpg"
-              alt=""
-            />
+            <img src="https://images4.alphacoders.com/941/thumb-1920-941902.png" alt="" />
 
-            <div class="player-details-wrapper">
+            <div v-if="opponentDetails" class="player-details-wrapper">
               <img :src="opponentDetails.avatar" alt="" />
               <div class="player-info">
                 <h4>{{ opponentDetails.name }}</h4>
@@ -73,7 +64,7 @@ export default {
   data() {
     return {
       roomId: "",
-      countdownTimer: 0,
+      countdownTimer: null,
       gameCountdown: 0,
       gameHasStarted: false,
       showIntroScreen: true,
@@ -83,9 +74,13 @@ export default {
     ...mapState("game", ["activeGameDetails"]),
     ...mapState("user", ["user", "userGameDetails", "socketId"]),
     opponentDetails() {
+      if (!this.activeGameDetails) return null;
+      const userEmail = this.user?.email;
+      if (!userEmail) return null;
+
       return this.activeGameDetails[
         Object.keys(this.activeGameDetails).find(
-          (key) => this.activeGameDetails[key].email !== this.user.email
+          (key) => this.activeGameDetails[key].email !== userEmail
         )
       ];
     },
@@ -94,9 +89,6 @@ export default {
     GAME_START_COUNTDOWN({ countdownTimer, textToType }) {
       this.$store.commit("game/SET_TEXT_TO_TYPE", textToType);
       const duration = countdownTimer;
-
-      this.countdownTimer = countdownTimer;
-      this.startCountdownTimer();
 
       gsap.to(".player-splash--right", {
         duration: 5,
@@ -124,21 +116,30 @@ export default {
         opacity: 0.9,
         ease: Linear.ease,
       });
+      this.startCountdownTimer(countdownTimer);
     },
   },
   methods: {
-    startCountdownTimer() {
-      if (this.countdownTimer > 0) {
-        setTimeout(() => {
-          this.countdownTimer -= 1;
-          this.startCountdownTimer();
-        }, 1000);
-      } else {
-        this.showIntroScreen = false;
-        setTimeout(() => {
-          this.gameHasStarted = true;
-        }, 1000);
-      }
+    startCountdownTimer(countdownTimer) {
+      this.countdownTimer = countdownTimer;
+    },
+  },
+  watch: {
+    countdownTimer: {
+      handler(value) {
+        // console.log(value);
+        if (value && value > 0) {
+          setTimeout(() => {
+            this.countdownTimer--;
+          }, 1000);
+        } else {
+          if (value !== null && value === 0) {
+            this.gameHasStarted = true;
+            this.showIntroScreen = false;
+          }
+        }
+      },
+      immediate: true,
     },
   },
 

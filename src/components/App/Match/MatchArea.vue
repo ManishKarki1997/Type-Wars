@@ -1,15 +1,10 @@
 <template>
   <div class="h-full bg-white rounded shadow-lg">
-    <div
-      class="bg-gray-100 rounded px-4 py-4 flex justify-between hover:shadow-md"
-    >
+    <div class="flex justify-between px-4 py-4 bg-gray-100 rounded hover:shadow-md">
       <div class="h-16 mr-6">
         <vs-tooltip circle top>
           <vs-avatar circle size="50" badge badge-color="success">
-            <img
-              :src="opponentDetails.avatar"
-              :alt="opponentDetails.name + ' avatar image'"
-            />
+            <img :src="opponentDetails.avatar" :alt="opponentDetails.name + ' avatar image'" />
           </vs-avatar>
           <template #tooltip> {{ opponentDetails.name }} </template>
         </vs-tooltip>
@@ -23,7 +18,7 @@
       <p>{{ 60 - gameCountdown }}</p>
     </div>
 
-    <div class="user-typed-data h-64 px-4 py-4 mt-4 overflow-y-auto">
+    <div class="h-64 px-4 py-4 mt-4 overflow-y-auto user-typed-data">
       <span
         v-for="(letter, index) in textToType"
         :key="'letter-' + index"
@@ -32,7 +27,7 @@
       >
     </div>
 
-    <div class="w-full px-4 py-4 rounded mt-4">
+    <div class="w-full px-4 py-4 mt-4 rounded">
       <textarea
         autofocus
         onselectstart="return false"
@@ -42,7 +37,7 @@
         onDrag="return false"
         onDrop="return false"
         autocomplete="off"
-        class="bg-gray-200 w-full px-4 py-4 rounded shadow border border-1 border-gray-600 disabled:bg-gray-300"
+        class="w-full px-4 py-4 bg-gray-200 border border-gray-600 rounded shadow border-1 disabled:bg-gray-300"
         name="typing-textbox"
         id="typing-textbox"
         cols="30"
@@ -117,9 +112,7 @@ export default {
         if (this.userTypedText.length > 0) {
           this.$store.commit("user/SET_USER_GAME_DETAILS", {
             ...this.userGameDetails,
-            wpm: Math.floor(
-              this.accurateLettersTyped / 5 / (this.gameCountdown / 60)
-            ),
+            wpm: Math.floor(this.accurateLettersTyped / 5 / (this.gameCountdown / 60)),
           });
         }
 
@@ -157,22 +150,6 @@ export default {
     OPPONENT_TYPING_DATA(data) {
       const { typedText, accuracy, completion, wpm, user } = data;
       this.opponentTypedText = typedText;
-    },
-    OPPONENT_LEFT_THE_GAME(data) {
-      this.$store.commit("game/SET_MATCH_RESULTS", {
-        user: {
-          ...this.user,
-          ...this.userGameDetails,
-        },
-        opponentDetails: {
-          ...data,
-        },
-        winner: this.user.email,
-      });
-      this.$store.commit("game/SET_MATCH_RESULTS_MODAL", {
-        show: true,
-        opponentLeft: true,
-      });
     },
   },
 
@@ -237,16 +214,9 @@ export default {
           .split("")
           .filter((l, i) => l === newTypedLetter[i]).length;
 
-        const accuracy =
-          Math.floor(
-            (accurateLettersTyped / this.userTypedText.length) * 100
-          ) || 0;
-        const completion = Math.floor(
-          (this.userTypedText.length / this.textToType.length) * 100
-        );
-        const wpm = Math.floor(
-          accurateLettersTyped / 5 / (this.gameCountdown / 60)
-        );
+        const accuracy = Math.floor((accurateLettersTyped / this.userTypedText.length) * 100) || 0;
+        const completion = Math.floor((this.userTypedText.length / this.textToType.length) * 100);
+        const wpm = Math.floor(accurateLettersTyped / 5 / (this.gameCountdown / 60));
 
         this.accurateLettersTyped = accurateLettersTyped;
 
@@ -306,19 +276,9 @@ export default {
         if (!oldTypedText && !newTypedText) return;
 
         // user pressed backspace(i.e. deleted a word)
-        if (
-          oldTypedText &&
-          newTypedText &&
-          oldTypedText.length > newTypedText.length
-        ) {
-          document
-            .querySelector(
-              `.opponent-text-${this.opponentTypedLetters.length - 2}`
-            )
-            .remove();
-          this.opponentTypedLetters.splice(
-            this.opponentTypedLetters.length - 1
-          );
+        if (oldTypedText && newTypedText && oldTypedText.length > newTypedText.length) {
+          document.querySelector(`.opponent-text-${this.opponentTypedLetters.length - 2}`).remove();
+          this.opponentTypedLetters.splice(this.opponentTypedLetters.length - 1);
         } else if (oldTypedText && !newTypedText) {
           // user selected all text and deleted them
           // so remove the text from the UI altogether
@@ -329,28 +289,18 @@ export default {
           // and add relevant background color
           const newTypedLetter = newTypedText[newTypedText.length - 1];
 
-          if (
-            newTypedLetter === this.textToType[this.opponentTypedLetters.length]
-          ) {
+          if (newTypedLetter === this.textToType[this.opponentTypedLetters.length]) {
             const spanElement = document.createElement("span");
             spanElement.classList.add("bg-green-200");
-            spanElement.classList.add(
-              `opponent-text-${this.opponentTypedLetters.length - 1}`
-            );
+            spanElement.classList.add(`opponent-text-${this.opponentTypedLetters.length - 1}`);
             spanElement.textContent = newTypedLetter;
-            document
-              .querySelector(".opponent-typed-text-p")
-              .append(spanElement);
+            document.querySelector(".opponent-typed-text-p").append(spanElement);
           } else {
             const spanElement = document.createElement("span");
             spanElement.classList.add("bg-red-200");
-            spanElement.classList.add(
-              `opponent-text-${this.opponentTypedLetters.length - 1}`
-            );
+            spanElement.classList.add(`opponent-text-${this.opponentTypedLetters.length - 1}`);
             spanElement.textContent = newTypedLetter;
-            document
-              .querySelector(".opponent-typed-text-p")
-              .append(spanElement);
+            document.querySelector(".opponent-typed-text-p").append(spanElement);
           }
           this.opponentTypedLetters.push(newTypedLetter);
         }
