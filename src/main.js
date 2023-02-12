@@ -41,12 +41,12 @@ axios.interceptors.request.use(
 
 Vue.use(Vuesax, {});
 
-Vue.use(
-  new VueSocketIO({
-    debug: false,
-    connection: process.env.VUE_APP_API_URL,
-  })
-);
+// Vue.use(
+//   new VueSocketIO({
+//     debug: false,
+//     connection: process.env.VUE_APP_API_URL,
+//   })
+// );
 
 Vue.config.productionTip = false;
 

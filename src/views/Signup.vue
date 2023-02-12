@@ -11,16 +11,24 @@
       <form @submit.prevent="handleUsersignup">
         <vs-input type="text" label="Name" v-model="user.name"> </vs-input>
 
-        <vs-input type="text" label="Username" v-model="user.username"> </vs-input>
+        <vs-input type="text" label="Username" v-model="user.username">
+        </vs-input>
 
         <vs-input type="email" label="Email" v-model="user.email"> </vs-input>
 
         <vs-row class="columns password-row">
-          <vs-input type="password" label="Password" v-model="user.password"> </vs-input>
+          <vs-input
+            type="password"
+            label="Password"
+            v-model="user.password"
+            style="width: 100%; margin-bottom: 0"
+          >
+          </vs-input>
           <vs-input
             type="password"
             label="Retype Password"
             v-model="user.retypePassword"
+            style="width: 100%"
           ></vs-input>
         </vs-row>
 
@@ -70,7 +78,10 @@ export default {
     async handleUsersignup() {
       this.isCallingAPI = true;
       try {
-        const res = await this.$axios.post(`${process.env.VUE_APP_API_URL}/api/auth`, this.user);
+        const res = await this.$axios.post(
+          `${process.env.VUE_APP_API_URL}/api/auth`,
+          this.user
+        );
 
         if (!res.data.error) {
           this.$toast.success(res.data.message);
@@ -118,7 +129,8 @@ section {
       padding: 2rem;
       border-radius: 5px;
 
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
       &:hover {
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       }
