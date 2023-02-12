@@ -79,7 +79,10 @@ export default {
       this.isCallingAPI = true;
       try {
         const res = await this.$axios.post(
-          `${process.env.VUE_APP_API_URL}/api/auth`,
+          `${
+            process.env.VUE_APP_API_URL ||
+            "https://typewarsapi-production.up.railway.app"
+          }/api/auth`,
           this.user
         );
 

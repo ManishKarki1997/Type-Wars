@@ -22,7 +22,9 @@ Vue.use(Toast, {
   closeOnClick: false,
 });
 
-axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+const API_URL = process.env.VUE_APP_API_URL || "https://typewarsapi-production.up.railway.app"
+
+axios.defaults.baseURL = API_URL;
 
 Vue.prototype.$axios = axios;
 
@@ -41,12 +43,12 @@ axios.interceptors.request.use(
 
 Vue.use(Vuesax, {});
 
-// Vue.use(
-//   new VueSocketIO({
-//     debug: false,
-//     connection: process.env.VUE_APP_API_URL,
-//   })
-// );
+Vue.use(
+  new VueSocketIO({
+    debug: false,
+    connection: API_URL,
+  })
+);
 
 Vue.config.productionTip = false;
 
